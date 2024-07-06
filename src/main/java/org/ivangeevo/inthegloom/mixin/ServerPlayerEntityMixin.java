@@ -33,7 +33,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
     }
 
 
-    //@Inject(method = "tick", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
         updateGloomState();

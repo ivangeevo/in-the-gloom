@@ -67,7 +67,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     }
 
 
-    //@Inject(method = "tick", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
         updateGloomState();
