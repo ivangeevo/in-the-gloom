@@ -4,6 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
@@ -26,6 +28,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements GloomEffectsConstants, PlayerEntityAdded
 {
+    private static TrackedData<Byte> GLOOM_LEVEL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BYTE);
+
     @Unique int previousGloomLevel = 0;
     @Unique int inGloomCounter = 0;
 
@@ -34,10 +38,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
         super(entityType, world);
     }
 
+
+
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void customData(DataTracker.Builder builder, CallbackInfo ci)
     {
-        builder.add(GLOOM_LEVEL, (byte) 0).build();
+        builder.add(GLOOM_LEVEL, (byte) 0);
     }
 
 
@@ -125,11 +131,32 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
                 }
 
                 if (this.getRandom().nextFloat() < fCaveSoundChance) {
+                    playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
                     GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
                 }
             }
         }
     }
+
+    public void playSoundInRandomDirection(PlayerEntity player, SoundEvent soundEvent, float fVolume, float fPitch, double dDistance)
+    {
+        double dXPos = player.getBlockPos().getX();
+        double dYPos = player.getBlockPos().getY();
+        double dZPos = player.getBlockPos().getZ();
+
+        double dRandomYaw = player.getRandom().nextDouble();
+
+        double dXOffset = (double)-MathHelper.sin( (float)( dRandomYaw * 360D  ) ) * dDistance;
+        double dZOffset = (double)MathHelper.cos( (float)( dRandomYaw * 360D ) ) * dDistance;
+
+        dXPos += dXOffset;
+        dZPos += dZOffset;
+
+        BlockPos soundPos = new BlockPos((int) dXPos, (int) dYPos, (int) dZPos);
+
+        player.getWorld().playSound(null, soundPos, soundEvent, SoundCategory.PLAYERS, fVolume, fPitch );
+    }
+
 
 
     @Override

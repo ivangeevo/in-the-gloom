@@ -83,11 +83,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
                     }
                 }
             }
-        }
-        else
-        {
-            setGloomLevel(0);
-            setInGloomCounter(0);
+            else
+            {
+                setGloomLevel(0);
+                setInGloomCounter(0);
+            }
         }
 
     }

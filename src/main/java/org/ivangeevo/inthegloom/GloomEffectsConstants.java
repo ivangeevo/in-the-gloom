@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 public interface GloomEffectsConstants
 {
-    TrackedData<Byte> GLOOM_LEVEL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BYTE);
 
     int GLOOM_COUNTER_BETWEEN_STATE_CHANGES = 1200; // 1 minute
     float MINIMUM_GLOOM_CAVE_SOUND_CHANCE = 0.01F; // 1/5 seconds
