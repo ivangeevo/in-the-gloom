@@ -49,7 +49,7 @@ public class GloomEffectsManager implements GloomEffectsConstants
 
         BlockPos soundPos = new BlockPos((int) dXPos, (int) dYPos, (int) dZPos);
 
-        player.getWorld().playSound(null, soundPos, soundEvent, SoundCategory.PLAYERS, fVolume, fPitch );
+        player.getWorld().playSound(player, soundPos, soundEvent, SoundCategory.PLAYERS, fVolume, fPitch );
     }
 
     // helper method to add exhaustion(debuffs to movement, break speed & attack damage)
@@ -71,8 +71,8 @@ public class GloomEffectsManager implements GloomEffectsConstants
     @Unique
     public boolean isInGloom(PlayerEntity player)
     {
-        // Check if player is in creative mode
-        if (!player.isCreative())
+
+        if ( !player.isCreative() ) // disable darkness effects in creative
         {
             // Check if the player has night vision
             if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) && player.getWorld().getDimensionEntry().matchesId(DimensionTypes.OVERWORLD_ID))
@@ -85,13 +85,11 @@ public class GloomEffectsManager implements GloomEffectsConstants
                 int blockLightLevel = world.getLightLevel(LightType.BLOCK, pos);
 
                 // Compute sun brightness (you might need to adjust this depending on your implementation)
+                // TODO: Fix the calculation for getting the sun brightness in this method.
                 float sunBrightness = computeOverworldSunBrightnessWithMoonPhases(world);
 
                 // Determine gloom conditions
-                boolean isGloomy = sunBrightness < 0.02F && skylightLevel < 8; // You can adjust the threshold
-
-                // If there is no skylight at all, consider it gloomy
-                return isGloomy || (blockLightLevel < 1); // Use a threshold for block light
+                return /**sunBrightness < 0.02F &&**/ skylightLevel < 8;
             }
         }
 
@@ -99,13 +97,13 @@ public class GloomEffectsManager implements GloomEffectsConstants
     }
 
 
-    static private final double[] moonBrightnessByPhase = new double[] {1.25D, 0.875, 0.75D, 0.5D, 0D, 0.5D, 0.75D, 1.25D};
+    static private double[] moonBrightnessByPhase = new double[] {1.25D, 0.875, 0.75D, 0.5D, 0D, 0.5D, 0.75D, 1.25D};
 
 
     public float computeOverworldSunBrightnessWithMoonPhases(World world)
     {
         // slight modified version of regular moon phase equation so that phase switches over at noon to avoid sudden jump in lighting at dawn
-        long lOffsetWorldTime = world.getTime() - 12000L;
+        long lOffsetWorldTime = world.getTimeOfDay() - 12000L;
 
         if ( lOffsetWorldTime < 0L )
         {
@@ -115,7 +113,7 @@ public class GloomEffectsManager implements GloomEffectsConstants
         int iMoonPhase = (int)( ( lOffsetWorldTime / 24000L ) % 8L );
         double dMoonBrightness = moonBrightnessByPhase[iMoonPhase];
 
-        float fCelestialAngle = world.getSkyAngleRadians(1F);
+        float fCelestialAngle = world.getSkyAngle(1F);
 
         // slight modifcation from vanilla calc so that gloom starts to set in on moonless nights the moment the sun drops beneath the horizon, and is removed at the moment of rise
         //float fSunInvertedBrightness = 1.0F - (MathHelper.cos(fCelestialAngle * (float)Math.PI * 2.0F) * 2.0F + 0.2F);

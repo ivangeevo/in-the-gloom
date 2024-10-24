@@ -58,7 +58,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
                 {
                     if (getWorld().getTime() % 80L == 0L)
                     {
-                        addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 180, 1, true, true));
+                        this.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 180, 1, true, false));
                     }
 
                     float counterProgress = (float) getInGloomCounter() / (float) GLOOM_COUNTER_BETWEEN_STATE_CHANGES;
@@ -77,7 +77,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
                             if (getHealth() <= 0.0F)
                             {
                                 BlockPos soundPos = getBlockPos();
-                                getWorld().playSound(null, soundPos, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.0F, getRandom().nextFloat() * 0.4F + 0.7F);
+                                this.getWorld().playSound(this, soundPos, SoundEvents.ENTITY_PLAYER_BURP,
+                                        SoundCategory.PLAYERS, 1.0F, getRandom().nextFloat() * 0.4F + 0.7F);
                             }
                         }
                     }
@@ -90,6 +91,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
             }
         }
 
+        System.out.println("Gloom Level: " + getGloomLevel() + ", In Gloom Counter: " + getInGloomCounter());
+        System.out.println("Is In Gloom: " + GloomEffectsManager.getInstance().isInGloom(this));
     }
 
 }
