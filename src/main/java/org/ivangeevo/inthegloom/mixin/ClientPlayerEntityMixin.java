@@ -27,10 +27,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
-        //updateGloomState();
+        updateGloomState();
     }
 
-    /**
+
     @Override
     public void updateGloomState()
     {
@@ -59,15 +59,18 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
             int lightLevel = getWorld().getLightLevel(getBlockPos());
 
-            if (lightLevel <= 0) {
+            if (lightLevel <= 0)
+            {
                 float fCaveSoundChance = MINIMUM_GLOOM_CAVE_SOUND_CHANCE + (MAXIMUM_GLOOM_CAVE_SOUND_CHANCE - MINIMUM_GLOOM_CAVE_SOUND_CHANCE) * fCounterProgress;
                 float fCaveSoundVolume = MINIMUM_GLOOM_CAVE_SOUND_VOLUME + (MAXIMUM_GLOOM_CAVE_SOUND_VOLUME - MINIMUM_GLOOM_CAVE_SOUND_VOLUME) * fCounterProgress;
 
-                if (iGloomLevel > 1) {
+                if (iGloomLevel > 1)
+                {
                     float fGrowlSoundChance = MINIMUM_GLOOM_GROWL_SOUND_CHANCE + (MAXIMUM_GLOOM_GROWL_SOUND_CHANCE - MINIMUM_GLOOM_GROWL_SOUND_CHANCE) * fCounterProgress;
                     float fGrowlSoundVolume = MINIMUM_GLOOM_GROWL_SOUND_VOLUME + (MAXIMUM_GLOOM_GROWL_SOUND_VOLUME - MINIMUM_GLOOM_GROWL_SOUND_VOLUME) * fCounterProgress;
 
-                    if (iGloomLevel > 2) {
+                    if (iGloomLevel > 2)
+                    {
                         // Insert effects here for when the player is getting bit
                     } else {
                         if (getRandom().nextFloat() < fGrowlSoundChance) {
@@ -82,5 +85,5 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             }
         }
     }
-    **/
+
 }

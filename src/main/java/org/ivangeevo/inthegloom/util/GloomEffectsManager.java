@@ -16,7 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class GloomEffectsManager implements GloomEffectsConstants
 {
     private static final GloomEffectsManager instance = new GloomEffectsManager();
+
     private GloomEffectsManager() {}
+
     public static GloomEffectsManager getInstance()
     {
         return instance;
@@ -62,9 +64,12 @@ public class GloomEffectsManager implements GloomEffectsConstants
 
 
     @Unique
-    public boolean isInGloom(PlayerEntity player) {
-        if (!player.isCreative()) {
-            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)  && player.getWorld().getRegistryKey() == World.OVERWORLD ) {
+    public boolean isInGloom(PlayerEntity player)
+    {
+        if (!player.isCreative())
+        {
+            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) /** && player.getWorld().getDimensionKey() == DimensionTypes.OVERWORLD **/)
+            {
                 World world = player.getWorld();
                 BlockPos pos = player.getBlockPos();
 

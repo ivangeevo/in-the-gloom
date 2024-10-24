@@ -130,24 +130,29 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     public void setInGloomCounter(int newValue) {
         this.inGloomCounter = newValue;
     }
+
     @Override
     public int getInGloomCounter() {
         return inGloomCounter;
     }
+
     @Override
     public int getGloomLevel()
     {
         return dataTracker.get(GLOOM_LEVEL);
     }
+
     @Override
     public void setGloomLevel(int newValue)
     {
         dataTracker.set(GLOOM_LEVEL, (byte) newValue);
     }
+
     @Override
     public void setPreviousGloomLevel(int newValue) {
         this.previousGloomLevel = newValue;
     }
+
     @Override
     public int getPreviousGloomLevel() {
         return previousGloomLevel;

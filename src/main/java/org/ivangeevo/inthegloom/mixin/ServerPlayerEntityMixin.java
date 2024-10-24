@@ -44,7 +44,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
     {
         if (isAlive())
         {
-            if (/**GloomEffectsManager.getInstance().isInGloom(this) &&**/ !this.isCreative())
+            if (GloomEffectsManager.getInstance().isInGloom(this) && !this.isCreative())
             {
                 setInGloomCounter(getInGloomCounter() + 1);
 
