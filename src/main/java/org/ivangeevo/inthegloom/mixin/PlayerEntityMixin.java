@@ -3,6 +3,7 @@ package org.ivangeevo.inthegloom.mixin;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
@@ -34,10 +35,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
-    private void customData(CallbackInfo ci)
+    private void customData(DataTracker.Builder builder, CallbackInfo ci)
     {
-        this.dataTracker.startTracking(GLOOM_LEVEL, (byte) 1);
+        builder.add(GLOOM_LEVEL, (byte) 0).build();
     }
+
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeCustomData(NbtCompound nbt, CallbackInfo ci)
@@ -57,13 +59,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     @Inject(method = "getBlockBreakingSpeed", at = @At(value = "RETURN"), cancellable = true)
     private void redirectGetBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir)
     {
-        cir.setReturnValue(GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir));
+        cir.setReturnValue(
+                GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir)
+        );
     }
 
     @Inject(method = "getMovementSpeed", at = @At("TAIL"), cancellable = true)
     public void modifyMovementSpeed(CallbackInfoReturnable<Float> cir)
     {
-        cir.setReturnValue(GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir));
+        cir.setReturnValue(
+                GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir)
+        );
     }
 
 
@@ -139,13 +145,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     @Override
     public int getGloomLevel()
     {
-        return dataTracker.get(GLOOM_LEVEL);
+        return this.getDataTracker().get(GLOOM_LEVEL);
     }
 
     @Override
     public void setGloomLevel(int newValue)
     {
-        dataTracker.set(GLOOM_LEVEL, (byte) newValue);
+        this.getDataTracker().set(GLOOM_LEVEL,(byte) newValue);
     }
 
     @Override

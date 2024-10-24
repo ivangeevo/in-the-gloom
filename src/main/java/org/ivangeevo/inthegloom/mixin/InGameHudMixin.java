@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -17,12 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin
 {
-    @Shadow private int scaledWidth;
-    @Shadow private int scaledHeight;
     @Shadow public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void injectedRender(DrawContext context, float tickDelta, CallbackInfo ci)
+    private void injectedRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci)
     {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
@@ -52,8 +51,8 @@ public abstract class InGameHudMixin
         Text statusText = Text.translatable(text);
 
         // Calculate the position of the hunger bar
-        int hungerBarX = this.scaledWidth / 2 + 91;
-        int hungerBarY = this.scaledHeight - 39;
+        int hungerBarX = context.getScaledWindowWidth() / 2 + 91;
+        int hungerBarY = context.getScaledWindowHeight() - 39;
 
         // Adjust the X and Y positions to render above the hunger bar
         int textX = hungerBarX - (textRenderer.getWidth(statusText) / 2) - 20; // 20 pixels to the left of the hunger bar
