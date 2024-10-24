@@ -53,14 +53,14 @@ public class GloomEffectsManager implements GloomEffectsConstants
     }
 
     // helper method to add exhaustion(debuffs to movement, break speed & attack damage)
-    public float applyGloomExhaustionModifier(PlayerEntity player,CallbackInfoReturnable<Float> cir)
+    public float applyGloomExhaustionModifier(PlayerEntity player, CallbackInfoReturnable<Float> cir)
     {
         float originalSpeed = cir.getReturnValue(); // Get original speed
         float speedMultiplier = 1.0f;
 
         int lightLevel = player.getWorld().getLightLevel(player.getBlockPos());
 
-        if (lightLevel <= 0)
+        if (!player.isCreative() && lightLevel <= 0)
         {
             speedMultiplier *= 0.5f; // speed is halved at light level 0
         }
@@ -72,7 +72,7 @@ public class GloomEffectsManager implements GloomEffectsConstants
     public boolean isInGloom(PlayerEntity player)
     {
 
-        if ( !player.isCreative() ) // disable darkness effects in creative
+        if ( !player.getAbilities().invulnerable ) // disable darkness effects in creative
         {
             // Check if the player has night vision
             if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) && player.getWorld().getDimensionEntry().matchesId(DimensionTypes.OVERWORLD_ID))

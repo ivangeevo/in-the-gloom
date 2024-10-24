@@ -131,7 +131,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
                 }
 
                 if (this.getRandom().nextFloat() < fCaveSoundChance) {
-                    playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
+                    //playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
                     GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
                 }
             }
