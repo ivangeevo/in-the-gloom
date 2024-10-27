@@ -33,15 +33,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
         super(entityType, world);
     }
 
-
-
-
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void customData(DataTracker.Builder builder, CallbackInfo ci)
     {
         builder.add(GLOOM_LEVEL, (byte) 0);
     }
-
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeCustomData(NbtCompound nbt, CallbackInfo ci)
@@ -73,7 +69,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
                 GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir)
         );
     }
-
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
@@ -124,19 +119,22 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
                     {
                         if (getRandom().nextFloat() < fGrowlSoundChance)
                         {
-                            GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
+                            GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this,
+                                    SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume,
+                                    (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
                         }
                     }
                 }
 
                 if (this.getRandom().nextFloat() < fCaveSoundChance)
                 {
-                    GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
+                    GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this,
+                            SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume,
+                            0.5F + this.getRandom().nextFloat(), 5D);
                 }
             }
         }
     }
-
 
     @Override
     public void setInGloomCounter(int newValue) {
