@@ -1,14 +1,5 @@
 package org.ivangeevo.inthegloom;
 
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Unique;
-
 public interface GloomEffectsConstants
 {
 

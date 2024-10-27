@@ -9,13 +9,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
 import org.ivangeevo.inthegloom.util.GloomEffectsManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -91,8 +89,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
             }
         }
 
+        /**
         System.out.println("Gloom Level: " + getGloomLevel() + ", In Gloom Counter: " + getInGloomCounter());
         System.out.println("Is In Gloom: " + GloomEffectsManager.getInstance().isInGloom(this));
+         **/
     }
 
 }

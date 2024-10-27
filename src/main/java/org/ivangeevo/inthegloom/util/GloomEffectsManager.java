@@ -2,21 +2,16 @@ package org.ivangeevo.inthegloom.util;
 
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.dimension.DimensionTypes;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Objects;
-import java.util.function.Predicate;
 
 // TODO: Move gloom logic here to clear up the PlayerEntity mixin class.
 public class GloomEffectsManager implements GloomEffectsConstants
@@ -71,6 +66,29 @@ public class GloomEffectsManager implements GloomEffectsConstants
     @Unique
     public boolean isInGloom(PlayerEntity player)
     {
+        if (!player.getAbilities().invulnerable) // Disable darkness effects in creative
+        {
+            // Check if the player has night vision
+            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) && player.getWorld().getDimensionEntry().matchesId(DimensionTypes.OVERWORLD_ID))
+            {
+                BlockPos pos = player.getBlockPos();
+
+                int skyLightLevel = player.getWorld().getLightLevel(LightType.SKY, pos);
+                int blockLightLevel = player.getWorld().getLightLevel(LightType.BLOCK, pos);
+
+                // Return true if it's night (sky light is 0) and block light is low enough (e.g., less than 1)
+                return skyLightLevel == 0 && blockLightLevel < 1; // Adjust block light threshold as needed
+            }
+        }
+
+        return false; // Default to not in gloom
+    }
+
+    // old method that has the moonPhases taken into consideration. Needs fixing and adding some other conditions too.
+    /**
+    @Unique
+    public boolean isInGloom(PlayerEntity player)
+    {
 
         if ( !player.getAbilities().invulnerable ) // disable darkness effects in creative
         {
@@ -89,13 +107,13 @@ public class GloomEffectsManager implements GloomEffectsConstants
                 float sunBrightness = computeOverworldSunBrightnessWithMoonPhases(world);
 
                 // Determine gloom conditions
-                return /**sunBrightness < 0.02F &&**/ skylightLevel < 8;
+                return sunBrightness < 0.02F  skylightLevel < 8;
             }
         }
 
         return false; // Default to not in gloom
     }
-
+    **/
 
     static private double[] moonBrightnessByPhase = new double[] {1.25D, 0.875, 0.75D, 0.5D, 0D, 0.5D, 0.75D, 1.25D};
 

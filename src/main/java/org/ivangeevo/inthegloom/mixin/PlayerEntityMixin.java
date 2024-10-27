@@ -8,12 +8,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
 import org.ivangeevo.inthegloom.entity.interfaces.PlayerEntityAdded;
@@ -37,6 +32,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     {
         super(entityType, world);
     }
+
 
 
 
@@ -123,40 +119,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
 
                     if (iGloomLevel > 2) {
                         // Insert effects here for when the player is getting bit
-                    } else {
-                        if (getRandom().nextFloat() < fGrowlSoundChance) {
+                    }
+                    else
+                    {
+                        if (getRandom().nextFloat() < fGrowlSoundChance)
+                        {
                             GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
                         }
                     }
                 }
 
-                if (this.getRandom().nextFloat() < fCaveSoundChance) {
-                    //playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
+                if (this.getRandom().nextFloat() < fCaveSoundChance)
+                {
                     GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
                 }
             }
         }
     }
-
-    public void playSoundInRandomDirection(PlayerEntity player, SoundEvent soundEvent, float fVolume, float fPitch, double dDistance)
-    {
-        double dXPos = player.getBlockPos().getX();
-        double dYPos = player.getBlockPos().getY();
-        double dZPos = player.getBlockPos().getZ();
-
-        double dRandomYaw = player.getRandom().nextDouble();
-
-        double dXOffset = (double)-MathHelper.sin( (float)( dRandomYaw * 360D  ) ) * dDistance;
-        double dZOffset = (double)MathHelper.cos( (float)( dRandomYaw * 360D ) ) * dDistance;
-
-        dXPos += dXOffset;
-        dZPos += dZOffset;
-
-        BlockPos soundPos = new BlockPos((int) dXPos, (int) dYPos, (int) dZPos);
-
-        player.getWorld().playSound(null, soundPos, soundEvent, SoundCategory.PLAYERS, fVolume, fPitch );
-    }
-
 
 
     @Override
