@@ -91,7 +91,7 @@ public class GloomEffectsManager implements GloomEffectsConstants
                 int blockLightLevel = player.getWorld().getLightLevel(LightType.BLOCK, pos);
 
                 // Get the moon phase (0 for full moon, up to 4 for new moon)
-                int moonPhase = ((LunarWorldView) player.getWorld()).getMoonPhase();
+                int moonPhase = player.getWorld().getMoonPhase();
 
                 // Check if it's nighttime
                 long timeOfDay = player.getWorld().getTimeOfDay() % 24000;
