@@ -7,15 +7,14 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LightType;
-import net.minecraft.world.LunarWorldView;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.ivangeevo.inthegloom.util.GloomUtil; // Ensure to import your GloomUtil class
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
@@ -26,31 +25,15 @@ public abstract class InGameHudMixin {
     private void injectedRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
-        if (player != null && !player.getAbilities().creativeMode) {
-            // Get the position and world
-            BlockPos pos = player.getBlockPos();
-            int skyLightLevel = player.getWorld().getLightLevel(LightType.SKY, pos);
-            int blockLightLevel = player.getWorld().getLightLevel(LightType.BLOCK, pos);
-
-            // Get the moon phase
-            int moonPhase = ((LunarWorldView) player.getWorld()).getMoonPhase();
-
-            // Check if it's nighttime
-            long timeOfDay = player.getWorld().getTimeOfDay() % 24000;
-            boolean isNight = timeOfDay >= 13000 && timeOfDay <= 23000;
-
-            // Set the gloom threshold for moon phase
-            int gloomMoonPhaseThreshold = 3; // Trigger gloom on moon phases 3 and 4 (darker nights)
-
-            // Conditions for gloom
-            boolean isUnderground = skyLightLevel == 0 && blockLightLevel < 1;
-            boolean isOutsideOnDarkNight = isNight && skyLightLevel == 15 && moonPhase >= gloomMoonPhaseThreshold && blockLightLevel == 0;
+        if (player != null) {
+            // Check if the player is in gloom using the GloomUtil class
+            boolean isInGloom = GloomUtil.isInGloom(player);
 
             // Status text variable
             String statusText = "";
 
-            // Check gloom conditions
-            if (isUnderground || isOutsideOnDarkNight) {
+            // Check if the player is in gloom
+            if (isInGloom) {
                 statusText = "Gloom";
             }
 

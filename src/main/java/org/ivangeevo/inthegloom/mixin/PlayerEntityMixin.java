@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
 import org.ivangeevo.inthegloom.entity.interfaces.PlayerEntityAdded;
 import org.ivangeevo.inthegloom.util.GloomEffectsManager;
+import org.ivangeevo.inthegloom.util.GloomUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -120,7 +121,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
             boolean isOutsideOnDarkNight = isNight && skyLightLevel == 15 && moonPhase >= gloomMoonPhaseThreshold && blockLightLevel == 0;
 
             // Check if in gloom conditions
-            if (isUnderground || isOutsideOnDarkNight) {
+            if (GloomUtil.isInGloom((PlayerEntity)(Object)this)) {
                 float fCaveSoundChance = MINIMUM_GLOOM_CAVE_SOUND_CHANCE + (MAXIMUM_GLOOM_CAVE_SOUND_CHANCE - MINIMUM_GLOOM_CAVE_SOUND_CHANCE) * fCounterProgress;
                 float fCaveSoundVolume = MINIMUM_GLOOM_CAVE_SOUND_VOLUME + (MAXIMUM_GLOOM_CAVE_SOUND_VOLUME - MINIMUM_GLOOM_CAVE_SOUND_VOLUME) * fCounterProgress;
 

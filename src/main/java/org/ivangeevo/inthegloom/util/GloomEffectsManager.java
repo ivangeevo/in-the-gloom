@@ -48,37 +48,22 @@ public class GloomEffectsManager implements GloomEffectsConstants
         player.getWorld().playSound(player, soundPos, soundEvent, SoundCategory.PLAYERS, fVolume, fPitch );
     }
 
-    // helper method to add exhaustion(debuffs to movement, break speed & attack damage)
+    // Helper method to add exhaustion (debuffs to movement, break speed & attack damage)
     public float applyGloomExhaustionModifier(PlayerEntity player, CallbackInfoReturnable<Float> cir) {
         float originalSpeed = cir.getReturnValue(); // Get original speed
         float speedMultiplier = 1.0f;
 
-        // Get the player's position and light levels
-        BlockPos pos = player.getBlockPos();
-        int skyLightLevel = player.getWorld().getLightLevel(LightType.SKY, pos);
-        int blockLightLevel = player.getWorld().getLightLevel(LightType.BLOCK, pos);
-
-        // Get the moon phase
-        int moonPhase = ((LunarWorldView) player.getWorld()).getMoonPhase();
-
-        // Check if it's nighttime
-        long timeOfDay = player.getWorld().getTimeOfDay() % 24000;
-        boolean isNight = timeOfDay >= 13000 && timeOfDay <= 23000;
-
-        // Set the gloom threshold for moon phase
-        int gloomMoonPhaseThreshold = 3; // Trigger gloom on moon phases 3 and 4 (darker nights)
-
-        // Determine gloom conditions
-        boolean isUnderground = skyLightLevel == 0 && blockLightLevel < 1;
-        boolean isOutsideOnDarkNight = isNight && skyLightLevel == 15 && moonPhase >= gloomMoonPhaseThreshold && blockLightLevel == 0;
+        // Check if the player is in gloom conditions
+        boolean isInGloom = GloomUtil.isInGloom(player);
 
         // Apply the gloom speed modifier if the player is not creative and in gloom conditions
-        if (!player.isCreative() && (isUnderground || isOutsideOnDarkNight)) {
+        if (!player.isCreative() && isInGloom) {
             speedMultiplier *= 0.5f; // speed is halved in gloom conditions
         }
 
         return originalSpeed * speedMultiplier;
     }
+
 
 
 
