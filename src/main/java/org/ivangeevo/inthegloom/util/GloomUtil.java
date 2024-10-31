@@ -11,7 +11,8 @@ public class GloomUtil {
 
     private static final double[] MOON_BRIGHTNESS_BY_PHASE = new double[]{1.25D, 0.875, 0.75D, 0.5D, 0D, 0.5D, 0.75D, 1.25D};
 
-    public static boolean isInGloom(PlayerEntity player) {
+    public static boolean isInGloom(PlayerEntity player)
+    {
         // Check if the player is in creative mode or has night vision
         if (!player.isCreative() && !player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
             World world = player.getWorld();
@@ -37,7 +38,8 @@ public class GloomUtil {
         return false; // Not in gloom conditions
     }
 
-    private static float computeOverworldSunBrightnessWithMoonPhases(World world) {
+    private static float computeOverworldSunBrightnessWithMoonPhases(World world)
+    {
         long worldTime = world.getTimeOfDay() - 12000L; // Offset world time
         if (worldTime < 0L) {
             worldTime = 0L; // Ensure non-negative
