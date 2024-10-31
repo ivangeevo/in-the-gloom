@@ -9,6 +9,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
+import net.minecraft.world.LunarWorldView;
 import net.minecraft.world.World;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
 import org.ivangeevo.inthegloom.entity.interfaces.PlayerEntityAdded;
@@ -77,23 +80,19 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     }
 
     @Override
-    public void updateGloomState()
-    {
+    public void updateGloomState() {
         int iGloomLevel = this.getGloomLevel();
 
-        if (this.getPreviousGloomLevel() != iGloomLevel)
-        {
+        if (this.getPreviousGloomLevel() != iGloomLevel) {
             setInGloomCounter(0);
             setPreviousGloomLevel(iGloomLevel);
 
-            if (iGloomLevel == 3)
-            {
+            if (iGloomLevel == 3) {
                 playSound(SoundEvents.ENTITY_ENDERMAN_STARE, 1.0F, 1.0F);
             }
         }
 
-        if (iGloomLevel > 0)
-        {
+        if (iGloomLevel > 0) {
             setInGloomCounter(getInGloomCounter() + 1);
 
             float fCounterProgress = (float) getInGloomCounter() / (float) GLOOM_COUNTER_BETWEEN_STATE_CHANGES;
@@ -102,9 +101,26 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
                 fCounterProgress = 1.0F;
             }
 
-            int lightLevel = getWorld().getLightLevel(getBlockPos());
+            BlockPos pos = getBlockPos();
+            int skyLightLevel = getWorld().getLightLevel(LightType.SKY, pos);
+            int blockLightLevel = getWorld().getLightLevel(LightType.BLOCK, pos);
 
-            if (lightLevel <= 0) {
+            // Get the moon phase
+            int moonPhase = ((LunarWorldView) getWorld()).getMoonPhase();
+
+            // Check if it's nighttime
+            long timeOfDay = getWorld().getTimeOfDay() % 24000;
+            boolean isNight = timeOfDay >= 13000 && timeOfDay <= 23000;
+
+            // Set gloom threshold for moon phase
+            int gloomMoonPhaseThreshold = 3; // Trigger gloom on moon phases 3 and 4 (darker nights)
+
+            // Determine gloom conditions
+            boolean isUnderground = skyLightLevel == 0 && blockLightLevel < 1;
+            boolean isOutsideOnDarkNight = isNight && skyLightLevel == 15 && moonPhase >= gloomMoonPhaseThreshold && blockLightLevel == 0;
+
+            // Check if in gloom conditions
+            if (isUnderground || isOutsideOnDarkNight) {
                 float fCaveSoundChance = MINIMUM_GLOOM_CAVE_SOUND_CHANCE + (MAXIMUM_GLOOM_CAVE_SOUND_CHANCE - MINIMUM_GLOOM_CAVE_SOUND_CHANCE) * fCounterProgress;
                 float fCaveSoundVolume = MINIMUM_GLOOM_CAVE_SOUND_VOLUME + (MAXIMUM_GLOOM_CAVE_SOUND_VOLUME - MINIMUM_GLOOM_CAVE_SOUND_VOLUME) * fCounterProgress;
 
@@ -114,27 +130,24 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
 
                     if (iGloomLevel > 2) {
                         // Insert effects here for when the player is getting bit
-                    }
-                    else
-                    {
-                        if (getRandom().nextFloat() < fGrowlSoundChance)
-                        {
-                            GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this,
+                    } else {
+                        if (getRandom().nextFloat() < fGrowlSoundChance) {
+                            GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity) (Object) this,
                                     SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume,
                                     (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
                         }
                     }
                 }
 
-                if (this.getRandom().nextFloat() < fCaveSoundChance)
-                {
-                    GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity)(Object)this,
+                if (this.getRandom().nextFloat() < fCaveSoundChance) {
+                    GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity) (Object) this,
                             SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume,
                             0.5F + this.getRandom().nextFloat(), 5D);
                 }
             }
         }
     }
+
 
     @Override
     public void setInGloomCounter(int newValue) {

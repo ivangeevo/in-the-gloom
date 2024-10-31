@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LightType;
+import net.minecraft.world.LunarWorldView;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionTypes;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
@@ -48,21 +49,75 @@ public class GloomEffectsManager implements GloomEffectsConstants
     }
 
     // helper method to add exhaustion(debuffs to movement, break speed & attack damage)
-    public float applyGloomExhaustionModifier(PlayerEntity player, CallbackInfoReturnable<Float> cir)
-    {
+    public float applyGloomExhaustionModifier(PlayerEntity player, CallbackInfoReturnable<Float> cir) {
         float originalSpeed = cir.getReturnValue(); // Get original speed
         float speedMultiplier = 1.0f;
 
-        int lightLevel = player.getWorld().getLightLevel(player.getBlockPos());
+        // Get the player's position and light levels
+        BlockPos pos = player.getBlockPos();
+        int skyLightLevel = player.getWorld().getLightLevel(LightType.SKY, pos);
+        int blockLightLevel = player.getWorld().getLightLevel(LightType.BLOCK, pos);
 
-        if (!player.isCreative() && lightLevel <= 0)
-        {
-            speedMultiplier *= 0.5f; // speed is halved at light level 0
+        // Get the moon phase
+        int moonPhase = ((LunarWorldView) player.getWorld()).getMoonPhase();
+
+        // Check if it's nighttime
+        long timeOfDay = player.getWorld().getTimeOfDay() % 24000;
+        boolean isNight = timeOfDay >= 13000 && timeOfDay <= 23000;
+
+        // Set the gloom threshold for moon phase
+        int gloomMoonPhaseThreshold = 3; // Trigger gloom on moon phases 3 and 4 (darker nights)
+
+        // Determine gloom conditions
+        boolean isUnderground = skyLightLevel == 0 && blockLightLevel < 1;
+        boolean isOutsideOnDarkNight = isNight && skyLightLevel == 15 && moonPhase >= gloomMoonPhaseThreshold && blockLightLevel == 0;
+
+        // Apply the gloom speed modifier if the player is not creative and in gloom conditions
+        if (!player.isCreative() && (isUnderground || isOutsideOnDarkNight)) {
+            speedMultiplier *= 0.5f; // speed is halved in gloom conditions
         }
 
         return originalSpeed * speedMultiplier;
     }
 
+
+
+    @Unique
+    public boolean isInGloom(PlayerEntity player) {
+        if (!player.getAbilities().invulnerable) { // Disable gloom effects in creative mode
+            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) && player.getWorld().getDimensionEntry().matchesId(DimensionTypes.OVERWORLD_ID)) {
+                BlockPos pos = player.getBlockPos();
+                int skyLightLevel = player.getWorld().getLightLevel(LightType.SKY, pos);
+                int blockLightLevel = player.getWorld().getLightLevel(LightType.BLOCK, pos);
+
+                // Get the moon phase (0 for full moon, up to 4 for new moon)
+                int moonPhase = ((LunarWorldView) player.getWorld()).getMoonPhase();
+
+                // Check if it's nighttime
+                long timeOfDay = player.getWorld().getTimeOfDay() % 24000;
+                boolean isNight = timeOfDay >= 13000 && timeOfDay <= 23000;
+
+                // Set the gloom threshold for moon phase
+                int gloomMoonPhaseThreshold = 3; // Trigger gloom on moon phases 3 and 4 (darker nights)
+
+                // Condition for underground gloom (based on skylight and block light)
+                boolean isUnderground = skyLightLevel == 0 && blockLightLevel < 1;
+
+                // Condition for outside gloom only if it's nighttime, the moon phase is dark enough, and block light is 0
+                boolean isOutsideOnDarkNight = isNight && skyLightLevel == 15
+                        && moonPhase >= gloomMoonPhaseThreshold && blockLightLevel == 0;
+
+                // Return true if either underground or outside on a dark night with no block light
+                return isUnderground || isOutsideOnDarkNight;
+            }
+        }
+        return false; // Default to not in gloom
+    }
+
+
+
+    // KEEP FOR NOW
+    /**
     @Unique
     public boolean isInGloom(PlayerEntity player)
     {
@@ -83,8 +138,11 @@ public class GloomEffectsManager implements GloomEffectsConstants
 
         return false; // Default to not in gloom
     }
+    **/
 
     // old method that has the moonPhases taken into consideration. Needs fixing and adding some other conditions too.
+
+    // KEEP FOR NOW
     /**
     @Unique
     public boolean isInGloom(PlayerEntity player)
