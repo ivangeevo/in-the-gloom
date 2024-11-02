@@ -29,7 +29,7 @@ public class GloomUtil {
             boolean isDarkNight = sunBrightness < 0.02D && blockLight < 4;
 
             // Check for underground gloom based on very low skylight
-            boolean isUndergroundDark = skylight < 5 && blockLight < 4;
+            boolean isUndergroundDark = skylight < 4 && blockLight < 1;
 
             // Return true if either condition is met
             return isDarkNight || isUndergroundDark;

@@ -45,6 +45,8 @@ public class GloomEffectsManager implements GloomEffectsConstants
         player.getWorld().playSound(player, soundPos, soundEvent, SoundCategory.PLAYERS, fVolume, fPitch );
     }
 
+    // TODO: Fix exhaustion modifier not applicable in modded environments.// in the dev it's fine
+    //  fix making the player slow down in gloom
     // Helper method to add exhaustion (debuffs to movement, break speed & attack damage)
     public float applyGloomExhaustionModifier(PlayerEntity player, CallbackInfoReturnable<Float> cir) {
         float originalSpeed = cir.getReturnValue(); // Get original speed
@@ -57,7 +59,6 @@ public class GloomEffectsManager implements GloomEffectsConstants
         if (!player.isCreative() && isInGloom) {
             speedMultiplier *= 0.5f; // speed is halved in gloom conditions
         }
-
         return originalSpeed * speedMultiplier;
     }
 
