@@ -1,17 +1,11 @@
 package org.ivangeevo.inthegloom.util;
 
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.LightType;
-import net.minecraft.world.LunarWorldView;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionTypes;
 import org.ivangeevo.inthegloom.GloomEffectsConstants;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // TODO: Move gloom logic here to clear up the PlayerEntity mixin class.

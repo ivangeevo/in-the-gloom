@@ -18,8 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         implements GloomEffectsConstants
 {
-    @Unique
-    float currentGloomFOVMultiplier = 1F;
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -44,7 +42,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
             if (iGloomLevel == 3)
             {
-                playSoundToPlayer(SoundEvents.ENTITY_ENDERMAN_STARE, SoundCategory.AMBIENT,1.0F, 1.0F);
+                this.playSound(SoundEvents.ENTITY_ENDERMAN_STARE,1.0F, 1.0F);
             }
         }
 

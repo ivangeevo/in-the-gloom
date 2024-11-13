@@ -27,7 +27,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements GloomEffectsConstants, PlayerEntityAdded
 {
-    private static TrackedData<Byte> GLOOM_LEVEL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BYTE);
+    @Unique
+    private static TrackedData<Byte> GLOOM_LEVEL = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BYTE);
 
     @Unique int previousGloomLevel = 0;
     @Unique int inGloomCounter = 0;

@@ -32,9 +32,23 @@ public abstract class InGameHudMixin {
             // Status text variable
             String statusText = "";
 
+            int gloomLevel = player.getGloomLevel();
+
             // Check if the player is in gloom
-            if (isInGloom) {
-                statusText = "Gloom";
+            if (isInGloom)
+            {
+                if (gloomLevel == 1)
+                {
+                    statusText = "Gloom";
+                }
+                else if (gloomLevel == 2)
+                {
+                    statusText = "Dread";
+                }
+                else if (gloomLevel == 3)
+                {
+                    statusText = "Terror";
+                }
             }
 
             // Render the status text if not empty
