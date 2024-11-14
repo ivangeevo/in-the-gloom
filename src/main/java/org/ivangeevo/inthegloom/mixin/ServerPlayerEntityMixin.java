@@ -10,9 +10,9 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.ivangeevo.inthegloom.GloomEffectsConstants;
-import org.ivangeevo.inthegloom.util.GloomEffectsManager;
+import org.ivangeevo.inthegloom.util.GloomEffectsConstants;
 import org.ivangeevo.inthegloom.util.GloomUtil;
+import org.ivangeevo.inthegloom.util.PlayerEntityMixinManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,15 +35,17 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci)
     {
-        updateGloomState();
+        this.updateGloomState();
+        PlayerEntityMixinManager.getInstance().onServerTick((ServerPlayerEntity)(Object)this);
     }
+
 
     @Override
     public void updateGloomState()
     {
         if (isAlive())
         {
-            if (/**GloomEffectsManager.getInstance().isInGloom(this)**/GloomUtil.isInGloom(this) && !this.isCreative())
+            if (GloomUtil.isInGloom(this) && !this.isCreative())
             {
                 setInGloomCounter(getInGloomCounter() + 1);
 
@@ -89,11 +91,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
                 setInGloomCounter(0);
             }
         }
-
-        /**
-        System.out.println("Gloom Level: " + getGloomLevel() + ", In Gloom Counter: " + getInGloomCounter());
-        System.out.println("Is In Gloom: " + GloomEffectsManager.getInstance().isInGloom(this));
-         **/
     }
 
 }

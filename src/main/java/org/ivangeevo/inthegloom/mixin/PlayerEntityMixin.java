@@ -1,6 +1,5 @@
 package org.ivangeevo.inthegloom.mixin;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
@@ -9,29 +8,35 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LightType;
-import net.minecraft.world.LunarWorldView;
 import net.minecraft.world.World;
-import org.ivangeevo.inthegloom.GloomEffectsConstants;
+import org.ivangeevo.inthegloom.util.GloomEffectsConstants;
 import org.ivangeevo.inthegloom.entity.interfaces.PlayerEntityAdded;
-import org.ivangeevo.inthegloom.util.GloomEffectsManager;
 import org.ivangeevo.inthegloom.util.GloomUtil;
+import org.ivangeevo.inthegloom.util.PlayerEntityMixinManager;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static org.ivangeevo.inthegloom.util.GloomUtil.isInGloom;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements GloomEffectsConstants, PlayerEntityAdded
 {
-    @Unique
-    private static TrackedData<Byte> GLOOM_LEVEL = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BYTE);
+    @Shadow public abstract boolean isPlayer();
+
+    @Shadow public abstract float getMovementSpeed();
+
+    @Unique private final PlayerEntity playerEntity = (PlayerEntity)(Object)this;
+
+    @Unique private static TrackedData<Byte> GLOOM_LEVEL = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BYTE);
 
     @Unique int previousGloomLevel = 0;
     @Unique int inGloomCounter = 0;
+
+    @Unique private final PlayerEntityMixinManager effectsManager = PlayerEntityMixinManager.getInstance();
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world)
     {
@@ -48,6 +53,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     private void writeCustomData(NbtCompound nbt, CallbackInfo ci)
     {
         nbt.putInt("fcGloomLevel", getGloomLevel());
+        nbt.putInt("fcGloomCounter", inGloomCounter);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
@@ -57,29 +63,20 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
         {
             setGloomLevel(nbt.getInt("fcGloomLevel"));
         }
+
+        if ( nbt.contains( "fcGloomCounter" ) )
+        {
+            inGloomCounter = nbt.getInt("fcGloomCounter");
+        }
     }
 
-    @Inject(method = "getBlockBreakingSpeed", at = @At(value = "RETURN"), cancellable = true)
-    private void redirectGetBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir)
-    {
-        cir.setReturnValue(
-                GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir)
-        );
+     @Inject(method = "tick", at = @At("TAIL"))
+     private void onTick(CallbackInfo ci) {
+        effectsManager.onTick(playerEntity);
     }
 
-    @Inject(method = "getMovementSpeed", at = @At("TAIL"), cancellable = true)
-    public void modifyMovementSpeed(CallbackInfoReturnable<Float> cir)
-    {
-        cir.setReturnValue(
-                GloomEffectsManager.getInstance().applyGloomExhaustionModifier((PlayerEntity) (Object)this, cir)
-        );
-    }
 
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void injectedTick(CallbackInfo ci)
-    {
-        updateGloomState();
-    }
+
 
     @Override
     public void updateGloomState()
@@ -109,7 +106,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
             }
 
             // Check if in gloom conditions
-            if (GloomUtil.isInGloom((PlayerEntity)(Object)this))
+            if (isInGloom((PlayerEntity)(Object)this))
             {
                 float fCaveSoundChance = MINIMUM_GLOOM_CAVE_SOUND_CHANCE + (MAXIMUM_GLOOM_CAVE_SOUND_CHANCE - MINIMUM_GLOOM_CAVE_SOUND_CHANCE) * fCounterProgress;
                 float fCaveSoundVolume = MINIMUM_GLOOM_CAVE_SOUND_VOLUME + (MAXIMUM_GLOOM_CAVE_SOUND_VOLUME - MINIMUM_GLOOM_CAVE_SOUND_VOLUME) * fCounterProgress;
@@ -126,7 +123,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
                     {
                         if (getRandom().nextFloat() < fGrowlSoundChance)
                         {
-                            GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity) (Object) this,
+                            GloomUtil.playSoundInRandomDirection(playerEntity,
                                     SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume,
                                     (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
                         }
@@ -135,7 +132,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
 
                 if (this.getRandom().nextFloat() < fCaveSoundChance)
                 {
-                    GloomEffectsManager.getInstance().playSoundInRandomDirection((PlayerEntity) (Object) this,
+                    GloomUtil.playSoundInRandomDirection(playerEntity,
                             SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume,
                             0.5F + this.getRandom().nextFloat(), 5D);
                 }

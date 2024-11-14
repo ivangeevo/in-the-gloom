@@ -4,12 +4,11 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import org.ivangeevo.inthegloom.GloomEffectsConstants;
-import org.ivangeevo.inthegloom.util.GloomEffectsManager;
+import org.ivangeevo.inthegloom.util.GloomEffectsConstants;
+import org.ivangeevo.inthegloom.util.GloomUtil;
+import org.ivangeevo.inthegloom.util.PlayerEntityMixinManager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -81,7 +80,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
                 if ( this.getRandom().nextFloat() < fGrowlSoundChance )
                 {
-                    GloomEffectsManager.getInstance().playSoundInRandomDirection(this, SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
+                    GloomUtil.playSoundInRandomDirection(this, SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
                 }
             }
             else
@@ -93,7 +92,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
             if (this.getRandom().nextFloat() < fCaveSoundChance)
             {
-                GloomEffectsManager.getInstance().playSoundInRandomDirection(this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
+                GloomUtil.playSoundInRandomDirection(this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
             }
         }
     }

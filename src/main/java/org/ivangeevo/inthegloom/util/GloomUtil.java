@@ -2,6 +2,8 @@ package org.ivangeevo.inthegloom.util;
 
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LightType;
@@ -67,4 +69,19 @@ public class GloomUtil {
 
         return (float) (sunBrightness * (1D - minBrightness) + minBrightness);
     }
+
+    public static void playSoundInRandomDirection(PlayerEntity player, SoundEvent soundEvent, float volume, float pitch, double distance)
+    {
+        double x = player.getBlockPos().getX();
+        double y = player.getBlockPos().getY();
+        double z = player.getBlockPos().getZ();
+        double randomYaw = player.getRandom().nextDouble() * 360D;
+
+        x += -MathHelper.sin((float) randomYaw) * distance;
+        z += MathHelper.cos((float) randomYaw) * distance;
+
+        BlockPos soundPos = new BlockPos((int) x, (int) y, (int) z);
+        player.getWorld().playSound(player, soundPos, soundEvent, SoundCategory.PLAYERS, volume, pitch);
+    }
+
 }

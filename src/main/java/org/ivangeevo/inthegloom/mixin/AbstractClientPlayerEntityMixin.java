@@ -10,7 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.ivangeevo.inthegloom.GloomEffectsConstants;
+import org.ivangeevo.inthegloom.util.GloomEffectsConstants;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,8 +27,9 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
         super(world, pos, yaw, gameProfile);
     }
 
-
-    @Inject(method = "getFovMultiplier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getActiveItem()Lnet/minecraft/item/ItemStack;"), cancellable = true)
+    // TODO: Not sure if this is injecting in the proper place. Possibly could be changed for a better modification.
+    @Inject(method = "getFovMultiplier", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getActiveItem()Lnet/minecraft/item/ItemStack;"), cancellable = true)
     private void injectedGloomFOV(CallbackInfoReturnable<Float> cir)
     {
         float f = 1.0f;

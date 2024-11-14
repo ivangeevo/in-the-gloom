@@ -1,4 +1,4 @@
-package org.ivangeevo.inthegloom;
+package org.ivangeevo.inthegloom.util;
 
 public interface GloomEffectsConstants
 {
