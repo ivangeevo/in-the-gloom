@@ -27,14 +27,9 @@ public class GloomUtil {
             int skylight = world.getLightLevel(LightType.SKY, pos);
             int blockLight = Math.max(world.getLightLevel(LightType.BLOCK, pos), world.getLightLevel(LightType.BLOCK, pos.up()));
 
-            // Check for outdoor gloom based on dark night sky brightness and block light
-            boolean isDarkNight = sunBrightness < 0.02D && blockLight < 1;
+            boolean isNaturallyDark = sunBrightness < 0.2D || skylight < 4;
 
-            // Check for underground gloom based on very low skylight
-            boolean isUndergroundDark = skylight < 4 && blockLight < 1;
-
-            // Return true if either condition is met
-            return isDarkNight || isUndergroundDark;
+            return isNaturallyDark && blockLight < 1;
         }
 
         return false;
