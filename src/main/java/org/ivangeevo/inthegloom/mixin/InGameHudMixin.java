@@ -18,8 +18,7 @@ public abstract class InGameHudMixin
     @Shadow public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void injectedRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci)
-    {
+    private void injectedRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         InGameHudMixinManager.getInstance().setGloomStatusText(context, getTextRenderer(), MinecraftClient.getInstance().player);
     }
 }
