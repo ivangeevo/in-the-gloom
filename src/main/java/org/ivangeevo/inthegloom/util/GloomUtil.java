@@ -11,10 +11,7 @@ import net.minecraft.world.World;
 
 public class GloomUtil {
 
-    private static final double[] MOON_BRIGHTNESS_BY_PHASE = new double[]{1.25D, 0.875, 0.75D, 0.5D, 0D, 0.5D, 0.75D, 1.25D};
-
-    public static boolean isInGloom(PlayerEntity player)
-    {
+    public static boolean isInGloom(PlayerEntity player) {
         // Skip if the player is in creative mode or has night vision
         if (!player.isCreative() && !player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
             World world = player.getWorld();
@@ -35,15 +32,16 @@ public class GloomUtil {
         return false;
     }
 
-    private static float computeOverworldSunBrightnessWithMoonPhases(World world)
-    {
+    private static float computeOverworldSunBrightnessWithMoonPhases(World world) {
         long worldTime = world.getTimeOfDay() - 12000L; // Offset world time
         if (worldTime < 0L) {
             worldTime = 0L; // Ensure non-negative
         }
 
-        int moonPhase = (int) (worldTime / 24000L) % 8; // Determine moon phase
-        double moonBrightness = MOON_BRIGHTNESS_BY_PHASE[moonPhase]; // Get brightness from phase
+        int moonPhase = (int) (worldTime / 24000L) % 8;
+
+        // Adjust moon brightness to 0 on new moon
+        double moonBrightness = moonPhase == 4 ? 0D : 1.0D;
 
         float celestialAngle = world.getSkyAngle(1F); // Get celestial angle for sun position
         float sunInvertedBrightness = 1.0F - (MathHelper.cos(celestialAngle * (float) Math.PI * 2.0F) * 2.0F + 0.25F);
@@ -51,13 +49,8 @@ public class GloomUtil {
 
         double sunBrightness = 1.0D - sunInvertedBrightness;
 
-        // Apply weather effects
-        double rainBrightnessModifier = 1.0D - (world.getRainGradient(1F) * 5.0F / 16.0D);
-        double stormBrightnessModifier = 1.0D - (world.getThunderGradient(1F) * 5.0F / 16.0D);
-        sunBrightness *= rainBrightnessModifier * stormBrightnessModifier;
-
         // Minimum brightness threshold
-        double minBrightness = 0.2D * moonBrightness * rainBrightnessModifier * stormBrightnessModifier;
+        double minBrightness = 0.2D * moonBrightness;
         if (minBrightness < 0.05D) {
             minBrightness = 0D;
         }
@@ -65,8 +58,7 @@ public class GloomUtil {
         return (float) (sunBrightness * (1D - minBrightness) + minBrightness);
     }
 
-    public static void playSoundInRandomDirection(PlayerEntity player, SoundEvent soundEvent, float volume, float pitch, double distance)
-    {
+    public static void playSoundInRandomDirection(PlayerEntity player, SoundEvent soundEvent, float volume, float pitch, double distance) {
         double x = player.getBlockPos().getX();
         double y = player.getBlockPos().getY();
         double z = player.getBlockPos().getZ();
@@ -78,5 +70,4 @@ public class GloomUtil {
         BlockPos soundPos = new BlockPos((int) x, (int) y, (int) z);
         player.getWorld().playSound(player, soundPos, soundEvent, SoundCategory.PLAYERS, volume, pitch);
     }
-
 }
