@@ -8,8 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.ivangeevo.inthegloom.InTheGloomMod;
 
-public class PlayerEntityMixinManager implements GloomEffectsConstants
-{
+public class PlayerEntityMixinManager implements GloomEffectsConstants {
 
     private static final PlayerEntityMixinManager instance = new PlayerEntityMixinManager();
 

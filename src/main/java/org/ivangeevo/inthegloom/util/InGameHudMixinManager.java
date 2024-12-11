@@ -1,5 +1,7 @@
 package org.ivangeevo.inthegloom.util;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +28,7 @@ public class InGameHudMixinManager
             String statusText = getString(player, isInGloom);
 
             // Render the status text if not empty
-            if (!statusText.isEmpty()) {
+            if (!statusText.isEmpty() && !player.isCreative()) {
                 renderDarknessStatusText(context, textRenderer, statusText);
             }
         }
@@ -60,6 +62,8 @@ public class InGameHudMixinManager
     private void renderDarknessStatusText(DrawContext context, TextRenderer textRenderer, String text) {
         Text statusText = Text.translatable(text);
 
+        PlayerEntity player = MinecraftClient.getInstance().player;
+
         // Calculate the position of the hunger bar
         int hungerBarX = context.getScaledWindowWidth() / 2 + 91;
         int hungerBarY = context.getScaledWindowHeight() - 39;
@@ -68,8 +72,22 @@ public class InGameHudMixinManager
         int textX = hungerBarX - (textRenderer.getWidth(statusText) / 2) - 20; // 20 pixels to the left of the hunger bar
         int textY = hungerBarY - 20; // Adjust the Y position to be above the hunger bar
 
+        if (FabricLoader.getInstance().isModLoaded("im_movens")) {
+            assert player != null;
+            if (isImMovensTextPresent(player))
+            {
+                textY -= 10;
+            }
+        }
+
         // Draw the status text
         context.drawText(textRenderer, statusText, textX, textY, 0xFFFFFFFF, true);
+    }
+
+    private boolean isImMovensTextPresent(PlayerEntity player)
+    {
+        boolean l = player.getHungerManager().getFoodLevel() <= 8 || player.getHealth() <= 10;
+        return FabricLoader.getInstance().isModLoaded("im_movens") && l;
     }
 
 }
