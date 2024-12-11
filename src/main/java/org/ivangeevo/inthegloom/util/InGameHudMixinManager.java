@@ -18,8 +18,7 @@ public class InGameHudMixinManager
     public static InGameHudMixinManager getInstance() { return INSTANCE; }
 
 
-    public void setGloomStatusText(DrawContext context, TextRenderer textRenderer, PlayerEntity player)
-    {
+    public void setGloomStatusText(DrawContext context, TextRenderer textRenderer, PlayerEntity player) {
         if (player != null) {
             // Check if the player is in gloom using the GloomUtil class
             boolean isInGloom = GloomUtil.isInGloom(player);
@@ -40,21 +39,15 @@ public class InGameHudMixinManager
         int gloomLevel = player.getGloomLevel();
 
         // Check if the player is in gloom
-        if (isInGloom)
-        {
-            if (gloomLevel == 1)
-            {
-                statusText = "Gloom";
-            }
-            else if (gloomLevel == 2)
-            {
-                statusText = "Dread";
-            }
-            else if (gloomLevel == 3)
-            {
-                statusText = "Terror";
-            }
+        if (isInGloom) {
+            statusText = switch (gloomLevel) {
+                case 1 -> "Gloom";
+                case 2 -> "Dread";
+                case 3 -> "Terror";
+                default -> statusText;
+            };
         }
+
         return statusText;
     }
 
@@ -74,8 +67,7 @@ public class InGameHudMixinManager
 
         if (FabricLoader.getInstance().isModLoaded("im_movens")) {
             assert player != null;
-            if (isImMovensTextPresent(player))
-            {
+            if (isImMovensTextPresent(player)) {
                 textY -= 10;
             }
         }
