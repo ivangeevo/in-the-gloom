@@ -32,13 +32,7 @@ public class PlayerEntityMixinManager implements GloomEffectsConstants {
         return instance;
     }
 
-    public void onTick(PlayerEntity player)
-    {
-
-    }
-
-    public void onServerTick(ServerPlayerEntity player)
-    {
+    public void onServerTick(ServerPlayerEntity player) {
         updateSpeedAttributes(player);
     }
 

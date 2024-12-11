@@ -38,8 +38,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
 
     @Unique private final PlayerEntityMixinManager effectsManager = PlayerEntityMixinManager.getInstance();
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world)
-    {
+    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -50,32 +49,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GloomEff
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-    private void writeCustomData(NbtCompound nbt, CallbackInfo ci)
-    {
+    private void writeCustomData(NbtCompound nbt, CallbackInfo ci) {
         nbt.putInt("fcGloomLevel", getGloomLevel());
         nbt.putInt("fcGloomCounter", inGloomCounter);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    private void readCustomData(NbtCompound nbt, CallbackInfo ci)
-    {
-        if ( nbt.contains( "fcGloomLevel" ) )
-        {
+    private void readCustomData(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains( "fcGloomLevel" )) {
             setGloomLevel(nbt.getInt("fcGloomLevel"));
         }
 
-        if ( nbt.contains( "fcGloomCounter" ) )
-        {
-            inGloomCounter = nbt.getInt("fcGloomCounter");
+        if (nbt.contains("fcGloomCounter")) {
+            setInGloomCounter(nbt.getInt("fcGloomCounter"));
         }
     }
-
-     @Inject(method = "tick", at = @At("TAIL"))
-     private void onTick(CallbackInfo ci) {
-        effectsManager.onTick(playerEntity);
-    }
-
-
 
 
     @Override

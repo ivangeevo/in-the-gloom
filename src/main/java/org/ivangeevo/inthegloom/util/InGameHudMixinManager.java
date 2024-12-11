@@ -76,8 +76,7 @@ public class InGameHudMixinManager
         context.drawText(textRenderer, statusText, textX, textY, 0xFFFFFFFF, true);
     }
 
-    private boolean isImMovensTextPresent(PlayerEntity player)
-    {
+    private boolean isImMovensTextPresent(PlayerEntity player) {
         boolean l = player.getHungerManager().getFoodLevel() <= 8 || player.getHealth() <= 10;
         return FabricLoader.getInstance().isModLoaded("im_movens") && l;
     }
