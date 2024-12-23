@@ -3,13 +3,13 @@
   "id": "in_the_gloom",
   "version": "${version}",
   "name": "In The Gloom",
-  "description": "",
+  "description": "Bad things happen in the gloom. Beware!",
   "authors": [],
   "contact": {
     "repo": "https://github.com/ivangeevo/in-the-gloom"
   },
   "license": "MIT",
-  "icon": "assets/in-the-gloom/icon.png",
+  "icon": "assets/in_the_gloom/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -17,6 +17,9 @@
     ],
     "main": [
       "org.ivangeevo.inthegloom.InTheGloomMod"
+    ],
+    "modmenu": [
+      "org.ivangeevo.inthegloom.config.InTheGloomModMenu"
     ]
   },
   "mixins": [

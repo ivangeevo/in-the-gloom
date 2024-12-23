@@ -1,19 +1,30 @@
 package org.ivangeevo.inthegloom.util;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.DimensionTypes;
+import org.ivangeevo.inthegloom.InTheGloomMod;
+import org.ivangeevo.inthegloom.config.ModSettings;
+import org.spongepowered.asm.mixin.Unique;
 
 public class GloomUtil {
 
+    @Unique
+    private static ModSettings configChecker = InTheGloomMod.getInstance().settings;
+
     public static boolean isInGloom(PlayerEntity player) {
-        // Skip if the player is in creative mode or has night vision
-        if (!player.isCreative() && !player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+
+        if (!player.isCreative() && !player.isSpectator() && canGetGloom(player)) {
             World world = player.getWorld();
             BlockPos pos = player.getBlockPos();
 
@@ -30,6 +41,11 @@ public class GloomUtil {
         }
 
         return false;
+    }
+
+    private static boolean canGetGloom(PlayerEntity player) {
+        return !player.hasStatusEffect(StatusEffects.NIGHT_VISION)
+                && getGloomEnabledDimensions(player.getWorld().getDimensionEntry());
     }
 
     private static float computeOverworldSunBrightnessWithMoonPhases(World world) {
@@ -69,5 +85,18 @@ public class GloomUtil {
 
         BlockPos soundPos = new BlockPos((int) x, (int) y, (int) z);
         player.getWorld().playSound(player, soundPos, soundEvent, SoundCategory.PLAYERS, volume, pitch);
+    }
+
+    private static boolean getGloomEnabledDimensions(RegistryEntry<DimensionType> regType) {
+        if (regType.matchesId(DimensionTypes.THE_END_ID) && configChecker.isTheEndGloom()){
+            return true;
+        }
+
+        if (regType.matchesId(DimensionTypes.THE_NETHER_ID) && configChecker.isNetherGloom()){
+            return true;
+        }
+
+        return regType.matchesId(DimensionTypes.OVERWORLD_ID) && configChecker.isOverworldGloom();
+
     }
 }
