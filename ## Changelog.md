@@ -1,3 +1,8 @@
+## v1.2
++ Added configuration options with Mod Menu for selecting which dimensions are affected by gloom.
++ Added mod icon & mod description to display properly
++ Fixed the player being able to get gloom effects while in spectator mode.
+
 ## v1.1
 + Added compatibility with I'm movens mod's status effect text
 + Made the gloom effects to activate only on gloom nights (simplified code logic, ignoring rain/thundering, but works better for now)

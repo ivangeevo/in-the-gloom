@@ -3,15 +3,15 @@ package org.ivangeevo.inthegloom.config;
 public class ModSettings
 {
         protected boolean overworldGloom = true;
-        protected boolean netherGloom = true;
-        protected boolean theEndGloom = true;
+        protected boolean theNetherGloom = false;
+        protected boolean theEndGloom = false;
 
         public boolean isOverworldGloom() {
                 return overworldGloom;
         }
 
-        public boolean isNetherGloom() {
-                return netherGloom;
+        public boolean isTheNetherGloom() {
+                return theNetherGloom;
         }
 
         public boolean isTheEndGloom() {

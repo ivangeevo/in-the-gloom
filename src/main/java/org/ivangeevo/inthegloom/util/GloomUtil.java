@@ -1,9 +1,7 @@
 package org.ivangeevo.inthegloom.util;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -92,7 +90,7 @@ public class GloomUtil {
             return true;
         }
 
-        if (regType.matchesId(DimensionTypes.THE_NETHER_ID) && configChecker.isNetherGloom()){
+        if (regType.matchesId(DimensionTypes.THE_NETHER_ID) && configChecker.isTheNetherGloom()){
             return true;
         }
 
