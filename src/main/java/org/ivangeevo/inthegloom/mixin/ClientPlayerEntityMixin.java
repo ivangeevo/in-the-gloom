@@ -23,36 +23,29 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void injectedTick(CallbackInfo ci)
-    {
+    private void injectedTick(CallbackInfo ci) {
         updateGloomState();
     }
 
-
     @Override
-    public void updateGloomState()
-    {
+    public void updateGloomState() {
         int iGloomLevel = this.getGloomLevel();
 
-        if (this.getPreviousGloomLevel() != getGloomLevel())
-        {
+        if (this.getPreviousGloomLevel() != getGloomLevel()) {
             setInGloomCounter(0);
             setPreviousGloomLevel(iGloomLevel);
 
-            if (iGloomLevel == 3)
-            {
+            if (iGloomLevel == 3) {
                 this.playSound(SoundEvents.ENTITY_ENDERMAN_STARE,1.0F, 1.0F);
             }
         }
 
-        if ( iGloomLevel > 0 )
-        {
+        if ( iGloomLevel > 0 ) {
             setInGloomCounter(getInGloomCounter() + 1);
 
             float fCounterProgress = (float) getInGloomCounter() / (float) GLOOM_COUNTER_BETWEEN_STATE_CHANGES;
 
-            if ( fCounterProgress > 1.0F )
-            {
+            if ( fCounterProgress > 1.0F ) {
                 fCounterProgress = 1.0F;
             }
 
@@ -61,37 +54,31 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             float fCaveSoundChance = MAXIMUM_GLOOM_CAVE_SOUND_CHANCE;
             float fCaveSoundVolume = MAXIMUM_GLOOM_CAVE_SOUND_VOLUME;
 
-            if ( iGloomLevel > 1 )
-            {
+            if ( iGloomLevel > 1 ) {
                 // growls
 
                 float fGrowlSoundChance = MAXIMUM_GLOOM_GROWL_SOUND_CHANCE;
                 float fGrowlSoundVolume = MAXIMUM_GLOOM_GROWL_SOUND_VOLUME;
 
-                if ( iGloomLevel > 2 )
-                {
+                if ( iGloomLevel > 2 ) {
                     // insert effects here for when the player is getting bit
                 }
-                else
-                {
+                else {
                     fGrowlSoundChance = MINIMUM_GLOOM_GROWL_SOUND_CHANCE + (MAXIMUM_GLOOM_GROWL_SOUND_CHANCE - MINIMUM_GLOOM_GROWL_SOUND_CHANCE) * fCounterProgress;
                     fGrowlSoundVolume = MINIMUM_GLOOM_GROWL_SOUND_VOLUME + (MAXIMUM_GLOOM_GROWL_SOUND_VOLUME - MINIMUM_GLOOM_GROWL_SOUND_VOLUME) * fCounterProgress;
                 }
 
-                if ( this.getRandom().nextFloat() < fGrowlSoundChance )
-                {
+                if ( this.getRandom().nextFloat() < fGrowlSoundChance ) {
                     GloomUtil.playSoundInRandomDirection(this, SoundEvents.ENTITY_WOLF_GROWL, fGrowlSoundVolume, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.05F + 0.55F, 5D);
                 }
             }
-            else
-            {
+            else {
                 fCaveSoundChance = MINIMUM_GLOOM_CAVE_SOUND_CHANCE + (MAXIMUM_GLOOM_CAVE_SOUND_CHANCE - MINIMUM_GLOOM_CAVE_SOUND_CHANCE) * fCounterProgress;
                 fCaveSoundVolume = MINIMUM_GLOOM_CAVE_SOUND_VOLUME + (MAXIMUM_GLOOM_CAVE_SOUND_VOLUME - MINIMUM_GLOOM_CAVE_SOUND_VOLUME) * fCounterProgress;
             }
 
 
-            if (this.getRandom().nextFloat() < fCaveSoundChance)
-            {
+            if (this.getRandom().nextFloat() < fCaveSoundChance) {
                 GloomUtil.playSoundInRandomDirection(this, SoundEvents.AMBIENT_CAVE.value(), fCaveSoundVolume, 0.5F + this.getRandom().nextFloat(), 5D);
             }
         }
