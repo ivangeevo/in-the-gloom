@@ -26,27 +26,22 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
 
     @Shadow public abstract boolean isCreative();
 
-    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile)
-    {
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
 
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void injectedTick(CallbackInfo ci)
-    {
+    private void injectedTick(CallbackInfo ci) {
         this.updateGloomState();
         PlayerEntityMixinManager.getInstance().onServerTick((ServerPlayerEntity)(Object)this);
     }
 
 
     @Override
-    public void updateGloomState()
-    {
-        if (isAlive())
-        {
-            if (GloomUtil.isInGloom(this) && !this.isCreative())
-            {
+    public void updateGloomState() {
+        if (isAlive()) {
+            if (GloomUtil.isInGloom(this) && !this.isCreative()) {
                 setInGloomCounter(getInGloomCounter() + 1);
 
                 if (getGloomLevel() == 0 || (getInGloomCounter() > GLOOM_COUNTER_BETWEEN_STATE_CHANGES && getGloomLevel() < 3))
@@ -55,26 +50,21 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
                     setInGloomCounter(0);
                 }
 
-                if (getGloomLevel() >= 3)
-                {
-                    if (getWorld().getTime() % 80L == 0L)
-                    {
+                if (getGloomLevel() >= 3) {
+                    if (getWorld().getTime() % 80L == 0L) {
                         this.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 180, 1, true, false));
                     }
 
                     float counterProgress = (float) getInGloomCounter() / (float) GLOOM_COUNTER_BETWEEN_STATE_CHANGES;
 
-                    if (counterProgress > 1.0F)
-                    {
+                    if (counterProgress > 1.0F) {
                         counterProgress = 1.0F;
                     }
 
                     float gloomBiteChance = minimumGloomBiteChance + (maximumGloomBiteChance - minimumGloomBiteChance) * counterProgress;
 
-                    if (getRandom().nextFloat() < gloomBiteChance)
-                    {
-                        if (damage(getDamageSources().generic(), 1.0F))
-                        {
+                    if (getRandom().nextFloat() < gloomBiteChance) {
+                        if (damage(getDamageSources().generic(), 1.0F)) {
                             if (getHealth() <= 0.0F)
                             {
                                 BlockPos soundPos = getBlockPos();
