@@ -2,6 +2,7 @@
 + Added configuration options with Mod Menu for selecting which dimensions are affected by gloom.
 + Added mod icon & mod description to display properly
 + Fixed the player being able to get gloom effects while in spectator mode.
++ Changed (fixed?) the FOV calculations code for gloom to work better. To be tested further.
 
 ## v1.1
 + Added compatibility with I'm movens mod's status effect text

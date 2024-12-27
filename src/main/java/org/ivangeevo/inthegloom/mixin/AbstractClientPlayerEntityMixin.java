@@ -14,9 +14,7 @@ import net.minecraft.world.World;
 import org.ivangeevo.inthegloom.util.GloomEffectsConstants;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -30,19 +28,29 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
         super(world, pos, yaw, gameProfile);
     }
 
+    @ModifyVariable(
+            method = "getFovMultiplier",
+            at = @At(value = "STORE", ordinal = 0), // Targeting the first calculation of 'f'
+            ordinal = 0
+    )
+    private float applyGloomFovMultiplier(float f) {
+        float gloomMultiplier = updateGloomFOVMultiplier();
+        return f * gloomMultiplier;
+    }
+
+    /**
     @Inject(method = "getFovMultiplier", at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/entity/player/PlayerAbilities;getWalkSpeed()F",
                     shift = At.Shift.AFTER),
-            slice = @Slice(from = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/player/PlayerAbilities;getWalkSpeed()F", ordinal = 1),
-                    to = @At(value = "INVOKE",
-                            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getActiveItem()Lnet/minecraft/item/ItemStack;")),
-            cancellable = true
-    )
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerAbilities;getWalkSpeed()F", ordinal = 1),
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getActiveItem()Lnet/minecraft/item/ItemStack;")),
+            cancellable = true)
     private void injectBetween(CallbackInfoReturnable<Float> cir, @Local float f) {
         f *= updateGloomFOVMultiplier();
         cir.setReturnValue(f);
     }
+     **/
 
     @Unique
     private float updateGloomFOVMultiplier() {
