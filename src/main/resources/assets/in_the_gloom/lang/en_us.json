@@ -1,10 +1,10 @@
 {
   "config.in_the_gloom.category.general": "General",
   "config.in_the_gloom.overworld_gloom": "Overworld Gloom",
-  "config.in_the_gloom.nether_gloom": "Nether Gloom",
+  "config.in_the_gloom.the_nether_gloom": "The Nether Gloom",
   "config.in_the_gloom.the_end_gloom": "The End Gloom",
   "config.in_the_gloom.tooltip.overworld_gloom": "Enable Gloom effects in The Overworld",
-  "config.in_the_gloom.tooltip.nether_gloom": "Enable Gloom effects in The Nether",
+  "config.in_the_gloom.tooltip.the_nether_gloom": "Enable Gloom effects in The Nether",
   "config.in_the_gloom.tooltip.the_end_gloom": "Enable Gloom effects in The End",
   "title.in_the_gloom.config": "In The Gloom Configuration Menu"
 }
