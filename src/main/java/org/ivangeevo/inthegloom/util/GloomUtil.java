@@ -22,7 +22,7 @@ public class GloomUtil {
 
     public static boolean isInGloom(PlayerEntity player) {
 
-        if (!player.isCreative() && !player.isSpectator() && canGetGloom(player)) {
+        if (canGetGloom(player)) {
             World world = player.getWorld();
             BlockPos pos = player.getBlockPos();
 
@@ -42,7 +42,7 @@ public class GloomUtil {
     }
 
     private static boolean canGetGloom(PlayerEntity player) {
-        return !player.hasStatusEffect(StatusEffects.NIGHT_VISION)
+        return !player.isCreative() && !player.isSpectator() & !player.hasStatusEffect(StatusEffects.NIGHT_VISION)
                 && getGloomEnabledDimensions(player.getWorld().getDimensionEntry());
     }
 
