@@ -22,13 +22,13 @@ public class ModPenalties implements HUDInitializeListener {
                     int gloomLevel = player.getGloomLevel();
                     switch (gloomLevel) {
                         case 1 -> {
-                            return "Gloom";
+                            return "penalty.in_the_gloom.gloom";
                         }
                         case 2 -> {
-                            return "Dread";
+                            return "penalty.in_the_gloom.dread";
                         }
                         case 3 -> {
-                            return "Terror";
+                            return "penalty.in_the_gloom.terror";
                         }
                     }
                     return "";
