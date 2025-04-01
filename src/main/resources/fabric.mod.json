@@ -28,7 +28,8 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "${minecraft_version}",
+    "btwr_sl": ">=${btwr_lib_version}"
   },
 
   "custom": {

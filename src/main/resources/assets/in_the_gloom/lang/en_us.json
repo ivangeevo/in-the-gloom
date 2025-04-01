@@ -6,5 +6,8 @@
   "config.in_the_gloom.tooltip.overworld_gloom": "Enable Gloom effects in The Overworld",
   "config.in_the_gloom.tooltip.the_nether_gloom": "Enable Gloom effects in The Nether",
   "config.in_the_gloom.tooltip.the_end_gloom": "Enable Gloom effects in The End",
+  "penalty.in_the_gloom.gloom": "Gloom",
+  "penalty.in_the_gloom.dread": "Dread",
+  "penalty.in_the_gloom.terror": "Terror",
   "title.in_the_gloom.config": "In The Gloom Configuration Menu"
 }
