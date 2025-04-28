@@ -1,9 +1,14 @@
+## v1.3
++ Added BTWR SL as dependency (jeffyjamzhd)
++ Rewritten hud rendering to use then new PenaltyDisplayManager from BTWRSL (jeffyjamzhd)
++ Added translation keys for the gloom penalties (jeffyjamzhd)
++ Updated the mod to Fabric API 0.115.6, Fabric Loader 0.16.13 & BTWR: Shared Library 0.53 (ivangeevo)
+
 ## v1.2
 + Added configuration options with Mod Menu for selecting which dimensions are affected by gloom.
 + Added mod icon & mod description to display properly
 + Fixed the player being able to get gloom effects while in spectator mode.
 + Changed (fixed?) the FOV calculations code for gloom to work better. To be tested further.
-
 
 ## v1.1
 + Added compatibility with I'm movens mod's status effect text
