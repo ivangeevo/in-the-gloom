@@ -21,8 +21,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gl
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci) {
-        this.btwr$updateGloomState();
-
         PlayerEntityMixinManager.getInstance().onServerTick((ServerPlayerEntity)(Object)this);
     }
 

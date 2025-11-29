@@ -1,6 +1,7 @@
 ## v1.4
 + Added authors(ivangeevo, jeffinitup) to the mod files, so they should display properly in places where they should be displayed
 + Changed all configuration options in the mod to use the custom config library added by BTWR: Shared Library
++ Changed player gloom mixin modifications to be handled with the Fabric Data Attachment API instead
 + Changed the mod license internally to be CC-BY-4.0
 + Split client side logic into its own package
 + Refactored pretty much the whole code; mainly for readability and cleaning up, but also so it's more in order with other mods from the BTWR project

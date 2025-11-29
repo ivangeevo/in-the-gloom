@@ -5,47 +5,33 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.btwr.in_the_gloom.util.GloomEffectsConstants;
+import org.btwr.in_the_gloom.data.ModDataAttachments;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 
-@Mixin(AbstractClientPlayerEntity.class)
-public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity implements GloomEffectsConstants {
-
-    @Unique float currentGloomFOVMultiplier = 1F;
+/**
+ * Mixin priority needs to be set high, otherwise there may be
+ * issues with mods that modify getFovMultiplier as well. This
+ * should run last when possible
+ */
+@Mixin(value = AbstractClientPlayerEntity.class, priority = 99999)
+abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
 
     public AbstractClientPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
 
-    @ModifyVariable(method = "getFovMultiplier", at = @At(value = "STORE", ordinal = 0), ordinal = 0)
-    private float applyGloomFovMultiplier(float f) {
-        float gloomMultiplier = updateGloomFOVMultiplier();
-        return f * gloomMultiplier;
-    }
+    @ModifyVariable(method = "getFovMultiplier", at = @At(value = "STORE", ordinal = 2), ordinal = 0)
+    private float applyGloomFovModifier(float originalFov) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        var gloomData = player.getAttached(ModDataAttachments.PLAYER_GLOOM);
+        if (gloomData == null) return originalFov;
 
-    @Unique
-    private float updateGloomFOVMultiplier() {
-        int gloomLevel = btwr$getGloomLevel();
+        // Let the tick method update the current multiplier gradually
+        float currentMultiplier = gloomData.updateGloomFOVMultiplier();
 
-        if (gloomLevel == 0) {
-            currentGloomFOVMultiplier -= GLOOM_FOV_MULTIPLIER_DELTA_OUT_PER_TICK;
-
-            if (currentGloomFOVMultiplier < 1F ) {
-                currentGloomFOVMultiplier = 1F;
-            }
-
-        }
-        else {
-            currentGloomFOVMultiplier += GLOOM_FOV_MULTIPLIER_DELTA_IN_PER_TICK;
-
-            if (currentGloomFOVMultiplier > MAXIMUM_GLOOM_FOV_MULTIPLIER) {
-                currentGloomFOVMultiplier = MAXIMUM_GLOOM_FOV_MULTIPLIER;
-            }
-        }
-
-        return currentGloomFOVMultiplier;
+        // Apply gloom multiplier on top of the current FOV
+        return originalFov * currentMultiplier;
     }
 
 }
