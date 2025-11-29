@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import org.ivangeevo.inthegloom.util.GloomUtil;
 
 public class ModPenalties implements HUDInitializeListener {
+
     @Override
     public void init(MinecraftClient client, PenaltyDisplayManager dm) {
         dm.addPenalty(new PenaltyDisplayManager.Penalty(
@@ -19,7 +20,7 @@ public class ModPenalties implements HUDInitializeListener {
                     if (player == null) return "";
 
                     // Get gloom level
-                    int gloomLevel = player.getGloomLevel();
+                    int gloomLevel = player.btwr$getGloomLevel();
                     switch (gloomLevel) {
                         case 1 -> {
                             return "penalty.in_the_gloom.gloom";
@@ -41,4 +42,5 @@ public class ModPenalties implements HUDInitializeListener {
                 }
         ));
     }
+
 }

@@ -24,7 +24,6 @@ public class PlayerEntityMixinManager implements GloomEffectsConstants {
             EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
     );
 
-
     private PlayerEntityMixinManager() {}
 
     public static PlayerEntityMixinManager getInstance()
@@ -42,7 +41,8 @@ public class PlayerEntityMixinManager implements GloomEffectsConstants {
         if (entityAttributeInstance != null) {
             if (GloomUtil.isInGloom(player)) {
                 entityAttributeInstance.updateModifier(GLOOM_MOVEMENT_SPEED_MODIFIER);
-            } else {
+            }
+            else {
                 entityAttributeInstance.removeModifier(GLOOM_MOVEMENT_SPEED_MODIFIER);
             }
         }
@@ -50,9 +50,11 @@ public class PlayerEntityMixinManager implements GloomEffectsConstants {
         if ((entityAttributeInstance2 = player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED)) != null) {
             if (GloomUtil.isInGloom(player)) {
                 entityAttributeInstance2.updateModifier(GLOOM_BREAKING_SPEED_MODIFIER);
-            } else {
+            }
+            else {
                 entityAttributeInstance2.removeModifier(GLOOM_BREAKING_SPEED_MODIFIER);
             }
         }
     }
+
 }

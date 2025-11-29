@@ -7,9 +7,10 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.ivangeevo.inthegloom.InTheGloomMod;
 
-public class SettingsGUI
-{
+public class SettingsGUI {
+
     static ModSettings settingsCommon = InTheGloomMod.getInstance().settings;
+
     public static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent).setTitle(Text.translatable("title.in_the_gloom.config"));
@@ -40,7 +41,6 @@ public class SettingsGUI
                 .setSaveConsumer(newValue -> settingsCommon.theEndGloom = newValue)
                 .setTooltip(Text.translatable("config.in_the_gloom.tooltip.the_end_gloom"))
                 .build());
-
 
         return builder.build();
     }

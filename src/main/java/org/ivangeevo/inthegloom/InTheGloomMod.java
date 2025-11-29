@@ -16,20 +16,20 @@ public class InTheGloomMod implements ModInitializer {
     public static final String MOD_ID = "in_the_gloom";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public ModSettings settings;
     private static InTheGloomMod instance;
     public static InTheGloomMod getInstance() {
         return instance;
     }
+
+    public ModSettings settings;
+
     @Override
-    public void onInitialize()
-    {
+    public void onInitialize() {
         LOGGER.info("Initializing In The Gloom.");
         loadSettings();
         instance = this;
     }
 
-    // Do not remove this comment or the project will NOT compile!
     public void loadSettings() {
         File file = new File("./config/btwr/inTheGloomCommon.json");
         Gson gson = new Gson();
@@ -41,7 +41,8 @@ public class InTheGloomMod implements ModInitializer {
             } catch (IOException e) {
                 LOGGER.warn("Could not load Tough Environment settings: " + e.getLocalizedMessage());
             }
-        } else {
+        }
+        else {
             settings = new ModSettings();
         }
     }
@@ -56,10 +57,10 @@ public class InTheGloomMod implements ModInitializer {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(gson.toJson(settings));
             fileWriter.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LOGGER.warn("Could not save In The Gloom settings: " + e.getLocalizedMessage());
         }
     }
-
 
 }

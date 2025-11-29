@@ -21,7 +21,6 @@ public class GloomUtil {
     private static ModSettings configChecker = InTheGloomMod.getInstance().settings;
 
     public static boolean isInGloom(PlayerEntity player) {
-
         if (canGetGloom(player)) {
             World world = player.getWorld();
             BlockPos pos = player.getBlockPos();

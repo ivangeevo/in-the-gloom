@@ -1,7 +1,7 @@
 package org.ivangeevo.inthegloom.config;
 
-public class ModSettings
-{
+public class ModSettings {
+
         protected boolean overworldGloom = true;
         protected boolean theNetherGloom = false;
         protected boolean theEndGloom = false;

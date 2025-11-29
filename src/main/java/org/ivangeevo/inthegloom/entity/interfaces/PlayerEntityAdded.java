@@ -1,21 +1,19 @@
 package org.ivangeevo.inthegloom.entity.interfaces;
 
-public interface PlayerEntityAdded
-{
-    void updateGloomState();
+public interface PlayerEntityAdded {
 
-    void setInGloomCounter(int newValue);
+    void btwr$updateGloomState();
 
-    void setGloomLevel(int newValue);
+    void btwr$setInGloomCounter(int newValue);
 
-    void setPreviousGloomLevel(int newValue);
+    void btwr$setGloomLevel(int newValue);
 
-    int getInGloomCounter();
+    void btwr$setPreviousGloomLevel(int newValue);
 
-    int getGloomLevel();
+    int btwr$getInGloomCounter();
 
-    int getPreviousGloomLevel();
+    int btwr$getGloomLevel();
 
-
+    int btwr$getPreviousGloomLevel();
 
 }

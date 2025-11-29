@@ -20,68 +20,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntity implements GloomEffectsConstants
-{
-    @Shadow public abstract boolean damage(DamageSource source, float amount);
-
-    @Shadow public abstract boolean isCreative();
+public abstract class ServerPlayerEntityMixin extends PlayerEntity implements GloomEffectsConstants {
 
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
 
-
     @Inject(method = "tick", at = @At("TAIL"))
     private void injectedTick(CallbackInfo ci) {
-        this.updateGloomState();
+        this.btwr$updateGloomState();
+
         PlayerEntityMixinManager.getInstance().onServerTick((ServerPlayerEntity)(Object)this);
     }
 
-
-    @Override
-    public void updateGloomState() {
-        if (isAlive()) {
-            if (GloomUtil.isInGloom(this) && !this.isCreative()) {
-                setInGloomCounter(getInGloomCounter() + 1);
-
-                if (getGloomLevel() == 0 || (getInGloomCounter() > GLOOM_COUNTER_BETWEEN_STATE_CHANGES && getGloomLevel() < 3))
-                {
-                    setGloomLevel(getGloomLevel() + 1);
-                    setInGloomCounter(0);
-                }
-
-                if (getGloomLevel() >= 3) {
-                    if (getWorld().getTime() % 80L == 0L) {
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 180, 1, true, false));
-                    }
-
-                    float counterProgress = (float) getInGloomCounter() / (float) GLOOM_COUNTER_BETWEEN_STATE_CHANGES;
-
-                    if (counterProgress > 1.0F) {
-                        counterProgress = 1.0F;
-                    }
-
-                    float gloomBiteChance = minimumGloomBiteChance + (maximumGloomBiteChance - minimumGloomBiteChance) * counterProgress;
-
-                    if (getRandom().nextFloat() < gloomBiteChance) {
-                        if (damage(getDamageSources().generic(), 1.0F)) {
-                            if (getHealth() <= 0.0F)
-                            {
-                                BlockPos soundPos = getBlockPos();
-                                this.getWorld().playSound(this, soundPos, SoundEvents.ENTITY_PLAYER_BURP,
-                                        SoundCategory.PLAYERS, 1.0F, getRandom().nextFloat() * 0.4F + 0.7F);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                setGloomLevel(0);
-                setInGloomCounter(0);
-            }
-        }
-    }
-
 }
-

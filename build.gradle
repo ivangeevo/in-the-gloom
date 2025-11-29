@@ -11,18 +11,10 @@ base {
 }
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
-    maven { url "https://ivangeevo.github.io/btwr-shared-lib/" }
+    maven { url "https://api.modrinth.com/maven" }
 }
-
-
 
 dependencies {
     // To change the versions see the gradle.properties file
@@ -33,12 +25,16 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    // BTWR: Shared Library
+    modImplementation("maven.modrinth:btwr-shared-library:${project.btwr_sl_version}")
+
+    // Cloth Config API
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    // Mod Menu
     modApi "com.terraformersmc:modmenu:${project.mod_menu_version}"
-    modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_lib_version}")
 }
 
 processResources {
