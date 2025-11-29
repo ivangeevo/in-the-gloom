@@ -1,4 +1,5 @@
 ## v1.4
++ The mod is officially in Beta now!
 + Added authors(ivangeevo, jeffinitup) to the mod files, so they should display properly in places where they should be displayed
 + Changed all configuration options in the mod to use the custom config library added by BTWR: Shared Library
 + Changed player gloom mixin modifications to be handled with the Fabric Data Attachment API instead
