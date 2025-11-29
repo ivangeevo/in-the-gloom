@@ -1,4 +1,5 @@
 ## v???(dev)
++ Changed the default config settings for the mod so that gloom is no longer applied in The Nether and The End by default
 
 ## v1.4
 + The mod is officially in Beta now!
