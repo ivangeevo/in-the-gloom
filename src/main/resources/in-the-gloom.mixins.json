@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.ivangeevo.inthegloom.mixin",
+  "package": "org.btwr.in_the_gloom.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "PlayerEntityMixin",
@@ -9,13 +9,7 @@
     "added.PlayerEntityAddedMixin",
     "added.ServerPlayerEntityAddedMixin"
   ],
-  "client": [
-    "AbstractClientPlayerEntityMixin",
-    "ClientPlayerEntityMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }
-
-
 }

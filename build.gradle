@@ -10,6 +10,21 @@ base {
     archivesName = project.archives_base_name
 }
 
+fabricApi {
+    configureDataGeneration() {modId = "in_the_gloom"}
+}
+
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "in_the_gloom" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
 repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
@@ -41,14 +56,14 @@ processResources {
     inputs.property "version", project.version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "loader_version", project.loader_version
-    inputs.property "btwr_lib_version", project.btwr_lib_version
+    inputs.property "btwr_sl_version", project.btwr_sl_version
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
                 "loader_version": project.loader_version,
-                "btwr_lib_version": project.btwr_lib_version
+                "btwr_sl_version": project.btwr_sl_version
     }
 }
 

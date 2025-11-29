@@ -4,39 +4,38 @@
   "version": "${version}",
   "name": "In The Gloom",
   "description": "Bad things happen in the gloom. Beware!",
-  "authors": [],
+  "authors": [
+    "ivangeevo",
+    "jeffinitup"
+  ],
   "contact": {
     "repo": "https://github.com/ivangeevo/in-the-gloom"
   },
-  "license": "MIT",
+  "license": "CC-BY-4.0",
   "icon": "assets/in_the_gloom/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "org.ivangeevo.inthegloom.client.InTheGloomModClient"
-    ],
-    "main": [
-      "org.ivangeevo.inthegloom.InTheGloomMod"
-    ],
-    "modmenu": [
-      "org.ivangeevo.inthegloom.config.InTheGloomModMenu"
-    ]
+    "fabric-datagen": ["org.btwr.in_the_gloom.datagen.InTheGloomDataGenerator"],
+    "client": ["org.btwr.in_the_gloom.InTheGloomModClient"],
+    "main": ["org.btwr.in_the_gloom.InTheGloomMod"],
+    "modmenu": ["org.btwr.in_the_gloom.config.InTheGloomModMenu"]
   },
   "mixins": [
-    "in-the-gloom.mixins.json"
+    "in-the-gloom.mixins.json",
+    {
+      "config": "in-the-gloom.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}",
-    "btwr_sl": ">=${btwr_lib_version}"
+    "btwr_sl": ">=${btwr_sl_version}"
   },
-
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_1657": ["org/ivangeevo/inthegloom/entity/interfaces/PlayerEntityAdded"]
-
+      "net/minecraft/class_1657": ["org/btwr/in_the_gloom/entity/interfaces/PlayerEntityAdded"]
     }
   }
-
 }

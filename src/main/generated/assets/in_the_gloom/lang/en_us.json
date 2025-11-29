@@ -1,0 +1,11 @@
+{
+  "config.in_the_gloom.category.general": "General",
+  "config.in_the_gloom.text.clientSettingsText": "Client Settings:",
+  "config.in_the_gloom.text.emptyClientConfigText": "§eNote:§r There are currently no client config settings.",
+  "config.in_the_gloom.text.serverSettingsNoAccessText": "§eNote:§r Server settings are not accessible in menus.\nThey can only be changed by editing the config file manually and require a world reload to take effect.",
+  "config.in_the_gloom.text.serverSettingsText": "Server Settings:",
+  "penalty_text.in_the_gloom.dread": "Dread",
+  "penalty_text.in_the_gloom.gloom": "Gloom",
+  "penalty_text.in_the_gloom.terror": "Terror",
+  "title.in_the_gloom.config": "In The Gloom Configuration Menu"
+}

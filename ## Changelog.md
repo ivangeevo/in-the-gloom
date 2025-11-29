@@ -1,7 +1,10 @@
 ## v1.4
++ Added authors(ivangeevo, jeffinitup) to the mod files, so they should display properly in places where they should be displayed
++ Changed all configuration options in the mod to use the custom config library added by BTWR: Shared Library
++ Changed the mod license internally to be CC-BY-4.0
 + Split client side logic into its own package
 + Refactored pretty much the whole code; mainly for readability and cleaning up, but also so it's more in order with other mods from the BTWR project
-+ Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.6 & BTWR: Shared Library 0.6.5
++ Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.3 & BTWR: Shared Library 0.6.5
 
 ## v1.3
 + Added BTWR SL as dependency (jeffyjamzhd)
