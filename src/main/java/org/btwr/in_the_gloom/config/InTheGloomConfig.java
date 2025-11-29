@@ -24,13 +24,13 @@ public class InTheGloomConfig {
 
     public static final ConfigSetting<Boolean> theNetherGloom =
             ConfigBuilder.booleanSetting("theNetherGloom")
-                    .defaultValue(true)
+                    .defaultValue(false)
                     .comment("Enable Gloom effects in The Nether")
                     .build();
 
     public static final ConfigSetting<Boolean> theEndGloom =
             ConfigBuilder.booleanSetting("theEndGloom")
-                    .defaultValue(true)
+                    .defaultValue(false)
                     .comment("Enable Gloom effects in The End")
                     .build();
 
