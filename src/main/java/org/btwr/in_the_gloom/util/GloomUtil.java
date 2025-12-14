@@ -18,23 +18,20 @@ import org.spongepowered.asm.mixin.Unique;
 public class GloomUtil {
 
     public static boolean isInGloom(PlayerEntity player) {
-        if (canGetGloom(player)) {
-            World world = player.getWorld();
-            BlockPos pos = player.getBlockPos();
+        if (!canGetGloom(player)) return false;
 
-            // Calculate the sun brightness considering moon phase
-            float sunBrightness = computeOverworldSunBrightnessWithMoonPhases(world);
+        World world = player.getWorld();
 
-            // Get skylight and block light levels
-            int skylight = world.getLightLevel(LightType.SKY, pos);
-            int blockLight = Math.max(world.getLightLevel(LightType.BLOCK, pos), world.getLightLevel(LightType.BLOCK, pos.up()));
+        if (!getGloomEnabledDimensions(world.getDimensionEntry())) return false;
 
-            boolean isNaturallyDark = sunBrightness < 0.2D || skylight < 4;
+        BlockPos pos = player.getBlockPos();
 
-            return isNaturallyDark && blockLight < 1;
-        }
+        float sunBrightness = computeOverworldSunBrightnessWithMoonPhases(world);
 
-        return false;
+        float brightnessHere = computeBrightness(world, pos, sunBrightness);
+        float brightnessAbove = computeBrightness(world, pos.up(), sunBrightness);
+
+        return Math.max(brightnessHere, brightnessAbove) < 0.001F;
     }
 
     private static boolean canGetGloom(PlayerEntity player) {
@@ -68,6 +65,16 @@ public class GloomUtil {
         return (float) (sunBrightness * (1D - minBrightness) + minBrightness);
     }
 
+    // Approximate combined brightness
+    private static float computeBrightness(World world, BlockPos pos, float sunBrightness) {
+        float blockLight = world.getLightLevel(LightType.BLOCK, pos) / 15f;
+        float skyLight = world.getLightLevel(LightType.SKY, pos) / 15f;
+
+        skyLight *= sunBrightness;
+
+        return Math.max(blockLight, skyLight);
+    }
+
     public static void playSoundInRandomDirection(PlayerEntity player, SoundEvent soundEvent, float volume, float pitch, double distance) {
         double x = player.getBlockPos().getX();
         double y = player.getBlockPos().getY();
@@ -93,4 +100,5 @@ public class GloomUtil {
         return regType.matchesId(DimensionTypes.OVERWORLD_ID) && InTheGloomConfig.overworldGloom.get();
 
     }
+
 }

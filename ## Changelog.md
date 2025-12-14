@@ -1,4 +1,6 @@
-## v???(dev)
+## v1.4.1
++ Generally changed how gloom is calculated. This should improve some cases where gloom was being considered active in the wrong places
++ Fixed a bug with gloom applying on boats and minecarts because of wrong Y position calculation when checking light level
 + Changed the config settings for the mod so that gloom is no longer applied in The Nether and The End by default
 
 ## v1.4
