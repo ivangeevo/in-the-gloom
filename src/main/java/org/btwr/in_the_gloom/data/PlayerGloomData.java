@@ -11,7 +11,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.sound.SoundEvents;
 import org.btwr.in_the_gloom.util.GloomEffectsConstants;
 import org.btwr.in_the_gloom.util.GloomUtil;
-import org.btwr.shared_library.data.EntityAttachmentBase;
+import org.btwr.shared_library.api.data.EntityAttachmentBase;
 
 public class PlayerGloomData implements EntityAttachmentBase<PlayerEntity>, GloomEffectsConstants {
 

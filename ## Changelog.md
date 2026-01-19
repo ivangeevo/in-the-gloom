@@ -1,4 +1,6 @@
-## v???(dev)
+## v1.4.2
++ Changed the gloom living entity event to be handled through the BTWREvents class from BTWR: Shared Library instead of having it in the mod
++ Updated the mod to BTWR: Shared Library 0.7
 
 ## v1.4.1
 + Generally changed how gloom is calculated. This should improve some cases where gloom was being considered active in the wrong places

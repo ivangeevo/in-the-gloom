@@ -4,7 +4,6 @@
   "package": "org.btwr.in_the_gloom.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LivingEntityMixin",
     "ServerPlayerEntityMixin"
   ],
   "injectors": {

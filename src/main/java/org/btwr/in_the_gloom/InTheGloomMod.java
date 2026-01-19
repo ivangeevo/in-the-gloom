@@ -3,7 +3,6 @@ package org.btwr.in_the_gloom;
 import net.fabricmc.api.ModInitializer;
 import org.btwr.in_the_gloom.config.InTheGloomConfig;
 import org.btwr.in_the_gloom.data.ModDataAttachments;
-import org.btwr.in_the_gloom.event.ModEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +17,6 @@ public class InTheGloomMod implements ModInitializer {
 
         InTheGloomConfig.register();
         ModDataAttachments.register();
-        ModEvents.register();
     }
 
 }
