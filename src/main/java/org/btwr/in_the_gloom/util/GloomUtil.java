@@ -11,9 +11,8 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
-import org.btwr.in_the_gloom.InTheGloomMod;
+import org.btwr.in_the_gloom.compat.LambDynamicLightsCompat;
 import org.btwr.in_the_gloom.config.InTheGloomConfig;
-import org.spongepowered.asm.mixin.Unique;
 
 public class GloomUtil {
 
@@ -35,8 +34,12 @@ public class GloomUtil {
     }
 
     private static boolean canGetGloom(PlayerEntity player) {
-        return !player.isCreative() && !player.isSpectator() & !player.hasStatusEffect(StatusEffects.NIGHT_VISION)
-                && getGloomEnabledDimensions(player.getWorld().getDimensionEntry());
+        boolean isCreativeOrSpectator = player.isCreative() && player.isSpectator();
+        boolean isHoldingDynamicLightItem = LambDynamicLightsCompat.playerHoldsLambRegisteredLight(player);
+        boolean hasNightVision = player.hasStatusEffect(StatusEffects.NIGHT_VISION);
+        boolean hasGloomInDimension = getGloomEnabledDimensions(player.getWorld().getDimensionEntry());
+
+        return !isCreativeOrSpectator && !isHoldingDynamicLightItem && !hasNightVision && hasGloomInDimension;
     }
 
     private static float computeOverworldSunBrightnessWithMoonPhases(World world) {

@@ -18,7 +18,8 @@
     "fabric-datagen": ["org.btwr.in_the_gloom.datagen.InTheGloomDataGenerator"],
     "client": ["org.btwr.in_the_gloom.InTheGloomModClient"],
     "main": ["org.btwr.in_the_gloom.InTheGloomMod"],
-    "modmenu": ["org.btwr.in_the_gloom.config.InTheGloomModMenu"]
+    "modmenu": ["org.btwr.in_the_gloom.config.InTheGloomModMenu"],
+    "lambdynlights:initializer": ["org.btwr.in_the_gloom.compat.LambDynamicLightsCompat"]
   },
   "mixins": [
     "in-the-gloom.mixins.json",
