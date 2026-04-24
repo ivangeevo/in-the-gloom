@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.8-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -29,6 +29,7 @@ repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
     maven { url "https://api.modrinth.com/maven" }
+    maven { url "https://maven.gegy.dev" }
 }
 
 dependencies {
@@ -50,6 +51,16 @@ dependencies {
 
     // Mod Menu
     modApi "com.terraformersmc:modmenu:${project.mod_menu_version}"
+
+    // The API of LambDynamicLights.
+    // This is only required for compilation if you're using the Java API.
+    modCompileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lamb_dynamic_lights_version}")
+
+    // For runtime of LambDynamicLights.
+    // Include only if you need to test in your dev env compatibility with LambDynamicLights.
+    // Replace with runtimeOnly if you want the dependency to be transitive.
+    modLocalRuntime("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lamb_dynamic_lights_version}")
+
 }
 
 processResources {
@@ -80,19 +91,20 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.
     // If you remove this line, sources will not be generated.
     withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
+    inputs.property "projectName", project.name
+
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.name}"}
     }
 }
 
