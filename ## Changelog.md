@@ -1,4 +1,6 @@
 ## v???(dev)
++ Added compatibility with LambDynamicLights, so the player will not get gloom when holding a dynamic light source that's registered with the mod
++ Updated the mod to Fabric API 0.116.11, Fabric Loader 0.19.2 & BTWR: Shared Library 0.8.4
 
 ## v1.4.2
 + Changed the gloom living entity event to be handled through the BTWREvents class from BTWR: Shared Library instead of having it in the mod
